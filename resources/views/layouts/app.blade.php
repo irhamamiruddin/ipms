@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../../../../vendors/css/vendor.bundle.base.css">
   <!-- endinject -->
   <!-- plugin css for this page -->
+  @stack('css')
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="../../../../css/vertical-layout-light/style.css">
@@ -57,6 +58,7 @@
   <script src="../../../../js/todolist.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
+  @stack('js')
   <!-- End custom js for this page-->
 </body>
 

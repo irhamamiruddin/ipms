@@ -21,6 +21,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'access_rights',
+        'role',
+        'role_id',
+        'status',
+        'superadmin_permission',
+        'bp_permission',
+        'cp_permission',
+        'land_staff_permission',
+        'project_staff_permission',
+        'manager_permission',
     ];
 
     /**

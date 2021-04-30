@@ -5,7 +5,7 @@
     <div class="card">
       <div class="card-body pb-0">
 
-        <h6 class="card-title">Land Reminder</h6>
+        <h5 class="card-title">Land Reminder</h5>
         <div class="row">
           <div class="table-responsive">
             <table class="table">
@@ -30,7 +30,7 @@
     <div class="card">
       <div class="card-body pb-0">
 
-        <h6 class="card-title">Land Annual Rent Reminders</h6>
+        <h5 class="card-title">Land Annual Rent Reminders</h5>
         <div class="row">
           <div class="table-responsive">
             <table class="table">
@@ -58,7 +58,7 @@
     <div class="card">
       <div class="card-body pb-0">
 
-        <h6 class="card-title">Land Log Reminders</h6>
+        <h5 class="card-title">Land Log Reminders</h5>
         <div class="row">
           <div class="table-responsive">
             <table class="table">
@@ -83,7 +83,7 @@
     <div class="card">
       <div class="card-body pb-0">
 
-        <h6 class="card-title">Project Consultant Key Approved Plan Reminders</h6>
+        <h5 class="card-title">Project Consultant Key Approved Plan Reminders</h5>
         <div class="row">
           <div class="table-responsive">
             <table class="table">
@@ -113,7 +113,7 @@
     <div class="card">
       <div class="card-body pb-0">
 
-        <h6 class="card-title">Project Log Reminders</h6>
+        <h5 class="card-title">Project Log Reminders</h5>
         <div class="row">
           <div class="table-responsive">
             <table class="table">
