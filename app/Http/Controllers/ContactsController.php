@@ -45,4 +45,50 @@ class ContactsController extends Controller
 
         return redirect('/contacts');
     }
+
+    public function show($id)
+    {
+        $contact = Contact::findOrFail($id);
+        
+        return view('contacts.show',['contact'=>$contact]);
+    }
+
+    public function edit($id)
+    {
+        $contact = Contact::findOrFail($id);
+        
+        return view('contacts.edit',['contact'=>$contact]);
+    }
+
+    public function update()
+    {
+        $id = request('id');
+
+        $contact = Contact::findOrFail($id);
+
+        $contact->name = request('name');
+        $contact->nric = request('nric');
+        $contact->race = request('race');
+        $contact->address = request('address');
+        $contact->contact_no = request('contact_no');
+        $contact->home_phone = request('home_phone');
+        $contact->office_phone = request('office_phone');
+        $contact->fax_phone = request('fax_phone');
+        $contact->email = request('email');
+        $contact->image = request('image');
+        $contact->remark = request('remark');
+
+        $contact->save();
+
+        return redirect('/contacts');
+    }
+    
+    public function destroy($id){
+
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+
+        
+        return redirect('/contacts');
+    }
 }

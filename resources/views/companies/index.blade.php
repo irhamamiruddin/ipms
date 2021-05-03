@@ -7,10 +7,10 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
-        <span class="card-title display-4">Contacts</span>
+        <span class="card-title display-4">Companies</span>
         <div class="float-right">
             <a class="btn btn-inverse-primary btn-fw" >Export</a>
-            <a class="btn btn-inverse-primary btn-fw" href="{{ route('contacts.create') }}">Add Contact</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('companies.create') }}">Add Company</a>
         </div>
     </div>
 </div>
@@ -23,28 +23,26 @@
                         <table id="order-listing" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>NRIC</th>
-                                    <th>Race</th>
+                                    <th>Business Nature</th>
+                                    <th>Company Name</th>
+                                    <th>Phone</th>
                                     <th>Address</th>
-                                    <th>Contact No.</th>
-                                    <th>Remark</th>
+                                    <th>Email</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($contacts as $contact)
+                                @foreach($companies as $company)
                                 <tr>
-                                    <td>{{$contact->name}}</td>
-                                    <td>{{$contact->nric}}</td>
-                                    <td>{{$contact->race}}</td>
-                                    <td>{{$contact->address}}</td>
-                                    <td>{{$contact->contact_no}}</td>
-                                    <td>{{$contact->remark}}</td>
+                                    <td>{{$company->business_nature_id}}</td>
+                                    <td>{{$company->company_name}}</td>
+                                    <td>{{$company->phone}}</td>
+                                    <td>{{$company->address}}</td>
+                                    <td>{{$company->email}}</td>
                                     <td>
-                                        <a href="{{ route('contacts.show',$contact->id) }}"><i class="icon-eye p-1"></i>
-                                        <a href="{{ route('contacts.edit',$contact->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('contacts.destroy',$contact->id) }}"><i class="icon-directions p-1"></i>
+                                        <a href="{{ route('companies.show',$company->id) }}"><i class="icon-eye p-1"></i>
+                                        <a href="{{ route('companies.edit',$company->id) }}"><i class="icon-like p-1"></i>
+                                        <a href="{{ route('companies.destroy',$company->id) }}"><i class="icon-directions p-1"></i>
                                     </td>
                                 </tr>
                                 @endforeach

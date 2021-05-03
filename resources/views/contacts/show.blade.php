@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
-        <span class="card-title display-4">Add New Contact</span>
+        <a href="{{ route('contacts.index') }}" class="btn btn-primary">Back</a>
     </div>
 </div>
 
@@ -10,7 +10,7 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                {{ Form::open(['route' => 'contacts.store', 'files' => true]) }}
+                {{ Form::model($contact, ['route' => 'contacts.index']) }}
                 
                 @include('contacts.form')
             </div>
@@ -31,18 +31,8 @@
         <div class="card">
             <div class="card-body pb-0">
                 @include('contacts.affiliated_user')
+                {{ Form::close() }}
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12 grid-margin">
-        <div class="float-right p-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="{{ route('contacts.index') }}" class="btn btn-secondary">Cancel</a>
-
-            {{ Form::close() }}
         </div>
     </div>
 </div>

@@ -39,7 +39,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{ route('companies.index') }}">
         <i class="icon-briefcase menu-icon"></i>
         <span class="menu-title">Companies</span>
         </a>

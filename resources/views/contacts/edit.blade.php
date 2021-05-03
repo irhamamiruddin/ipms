@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
-        <span class="card-title display-4">Add New Contact</span>
+        <span class="card-title display-4">Edit Contact</span>
     </div>
 </div>
 
@@ -10,7 +10,9 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                {{ Form::open(['route' => 'contacts.store', 'files' => true]) }}
+                {{ Form::model($contact,['route' => 'contacts.update', 'files' => true]) }}
+                @method('PUT')
+                {{ Form::hidden('id', $contact->id) }}
                 
                 @include('contacts.form')
             </div>
