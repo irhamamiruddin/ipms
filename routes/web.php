@@ -35,6 +35,33 @@ Route::get('/companies/{id}/edit', [App\Http\Controllers\CompanyController::clas
 Route::put('/companies', [App\Http\Controllers\CompanyController::class, 'update'])->name('companies.update');
 Route::get('/companies/{id}', [App\Http\Controllers\CompanyController::class, 'destroy'])->name('companies.destroy');
 
+//Settings - Development Components
+Route::get('/settings/development-components', [App\Http\Controllers\ComponentController::class, 'index'])->name('settings.components.index');
+//Type R1
+Route::post('/settings/development-components/r1', [App\Http\Controllers\ComponentController::class, 'storeR1'])->name('r1.store');
+Route::put('/settings/development-components/r1', [App\Http\Controllers\ComponentController::class, 'updateR1'])->name('r1.update');
+Route::get('/settings/development-components/r1/{id}', [App\Http\Controllers\ComponentController::class, 'destroyR1'])->name('r1.destroy');
+//Type R2
+Route::post('/settings/development-components/r2', [App\Http\Controllers\ComponentController::class, 'storeR2'])->name('r2.store');
+Route::put('/settings/development-components/r2', [App\Http\Controllers\ComponentController::class, 'updateR2'])->name('r2.update');
+Route::get('/settings/development-components/r2/{id}', [App\Http\Controllers\ComponentController::class, 'destroyR2'])->name('r2.destroy');
+//Type R3
+Route::post('/settings/development-components/r3', [App\Http\Controllers\ComponentController::class, 'storeR3'])->name('r3.store');
+Route::put('/settings/development-components/r3', [App\Http\Controllers\ComponentController::class, 'updateR3'])->name('r3.update');
+Route::get('/settings/development-components/r3/{id}', [App\Http\Controllers\ComponentController::class, 'destroyR3'])->name('r3.destroy');
+//Type A1
+Route::post('/settings/development-components/a1', [App\Http\Controllers\ComponentController::class, 'storeA1'])->name('a1.store');
+Route::put('/settings/development-components/a1', [App\Http\Controllers\ComponentController::class, 'updateA1'])->name('a1.update');
+Route::get('/settings/development-components/a1/{id}', [App\Http\Controllers\ComponentController::class, 'destroyA1'])->name('a1.destroy');
+//Type C1
+Route::post('/settings/development-components/c1', [App\Http\Controllers\ComponentController::class, 'storeC1'])->name('c1.store');
+Route::put('/settings/development-components/c1', [App\Http\Controllers\ComponentController::class, 'updateC1'])->name('c1.update');
+Route::get('/settings/development-components/c1/{id}', [App\Http\Controllers\ComponentController::class, 'destroyC1'])->name('c1.destroy');
+//Type O1
+Route::post('/settings/development-components/o1', [App\Http\Controllers\ComponentController::class, 'storeO1'])->name('o1.store');
+Route::put('/settings/development-components/o1', [App\Http\Controllers\ComponentController::class, 'updateO1'])->name('o1.update');
+Route::get('/settings/development-components/o1/{id}', [App\Http\Controllers\ComponentController::class, 'destroyO1'])->name('o1.destroy');
+
 //Settings - Others
 Route::get('/settings/others', [App\Http\Controllers\OtherController::class, 'index'])->name('settings.others.index');
 //Business Natures
