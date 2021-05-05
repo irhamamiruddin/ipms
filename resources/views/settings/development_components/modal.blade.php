@@ -193,7 +193,7 @@
       @csrf
       <div class="modal-body">
         <div class="form-group">
-          <input type="text" class="form-control" name="type_a1" id="type_a1" placeholder="Enter a1">
+          <input type="text" class="form-control" name="type_a1" id="type_a1" placeholder="Enter A1">
         </div>
       </div>
       <div class="modal-footer">
@@ -253,7 +253,7 @@
       @csrf
       <div class="modal-body">
         <div class="form-group">
-          <input type="text" class="form-control" name="type_c1" id="type_c1" placeholder="Enter c1">
+          <input type="text" class="form-control" name="type_c1" id="type_c1" placeholder="Enter C1">
         </div>
       </div>
       <div class="modal-footer">
@@ -313,7 +313,7 @@
       @csrf
       <div class="modal-body">
         <div class="form-group">
-          <input type="text" class="form-control" name="type_o1" id="type_o1" placeholder="Enter o1">
+          <input type="text" class="form-control" name="type_o1" id="type_o1" placeholder="Enter O1">
         </div>
       </div>
       <div class="modal-footer">

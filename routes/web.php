@@ -62,6 +62,25 @@ Route::post('/settings/development-components/o1', [App\Http\Controllers\Compone
 Route::put('/settings/development-components/o1', [App\Http\Controllers\ComponentController::class, 'updateO1'])->name('o1.update');
 Route::get('/settings/development-components/o1/{id}', [App\Http\Controllers\ComponentController::class, 'destroyO1'])->name('o1.destroy');
 
+//Settings - Logs
+Route::get('/settings/logs', [App\Http\Controllers\LogSettingController::class, 'index'])->name('settings.logs.index');
+//Log Nature
+Route::post('/settings/logs/log-natures', [App\Http\Controllers\LogSettingController::class, 'storeNature'])->name('nature.store');
+Route::put('/settings/logs/log-natures', [App\Http\Controllers\LogSettingController::class, 'updateNature'])->name('nature.update');
+Route::get('/settings/logs/log-natures/{id}', [App\Http\Controllers\LogSettingController::class, 'destroyNature'])->name('nature.destroy');
+//Level 1
+Route::post('/settings/logs/level-1', [App\Http\Controllers\LogSettingController::class, 'storeLevel1'])->name('level1.store');
+Route::put('/settings/logs/level-1', [App\Http\Controllers\LogSettingController::class, 'updateLevel1'])->name('level1.update');
+Route::get('/settings/logs/level-1/{id}', [App\Http\Controllers\LogSettingController::class, 'destroyLevel1'])->name('level1.destroy');
+//Level 2
+Route::post('/settings/logs/level-2', [App\Http\Controllers\LogSettingController::class, 'storeLevel2'])->name('level2.store');
+Route::put('/settings/logs/level-2', [App\Http\Controllers\LogSettingController::class, 'updateLevel2'])->name('level2.update');
+Route::get('/settings/logs/level-2/{id}', [App\Http\Controllers\LogSettingController::class, 'destroyLevel2'])->name('level2.destroy');
+//Level 3
+Route::post('/settings/logs/level-3', [App\Http\Controllers\LogSettingController::class, 'storeLevel3'])->name('level3.store');
+Route::put('/settings/logs/level-3', [App\Http\Controllers\LogSettingController::class, 'updateLevel3'])->name('level3.update');
+Route::get('/settings/logs/level-3/{id}', [App\Http\Controllers\LogSettingController::class, 'destroyLevel3'])->name('level3.destroy');
+
 //Settings - Others
 Route::get('/settings/others', [App\Http\Controllers\OtherController::class, 'index'])->name('settings.others.index');
 //Business Natures
