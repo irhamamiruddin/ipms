@@ -85,7 +85,7 @@
         <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="#">Development Components</a></li>
             <li class="nav-item"> <a class="nav-link" href="#">Logs</a></li>
-            <li class="nav-item"> <a class="nav-link" href="#">Others</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('settings.others.index') }}">Others</a></li>
             <li class="nav-item"> <a class="nav-link" href="#">Users</a></li>
         </ul>
         </div>

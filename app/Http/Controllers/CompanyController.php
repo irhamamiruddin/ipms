@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\BusinessNature;
 
-class CompaniesController extends Controller
+class CompanyController extends Controller
 {
     public function __construct()
     {
