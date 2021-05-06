@@ -119,3 +119,18 @@ Route::get('/settings/others/project-status/{id}', [App\Http\Controllers\OtherCo
 Route::post('/settings/others/type-of-agreement', [App\Http\Controllers\OtherController::class, 'storeAgreement'])->name('agreement.store');
 Route::put('/settings/others/type-of-agreement', [App\Http\Controllers\OtherController::class, 'updateAgreement'])->name('agreement.update');
 Route::get('/settings/others/type-of-agreement/{id}', [App\Http\Controllers\OtherController::class, 'destroyAgreement'])->name('agreement.destroy');
+
+//Settings - Users
+Route::get('/settings/users', [App\Http\Controllers\UserSettingController::class, 'index'])->name('settings.users.index');
+Route::get('/settings/users/create', [App\Http\Controllers\UserSettingController::class, 'create'])->name('users.create');
+Route::post('/settings/users', [App\Http\Controllers\UserSettingController::class, 'store'])->name('users.store');
+Route::get('/settings/users/{id}/edit', [App\Http\Controllers\UserSettingController::class, 'edit'])->name('users.edit');
+Route::put('/settings/users', [App\Http\Controllers\UserSettingController::class, 'update'])->name('users.update');
+Route::get('/settings/users/{id}', [App\Http\Controllers\UserSettingController::class, 'destroy'])->name('users.destroy');
+//User Roles
+Route::get('/settings/users/roles/index', [App\Http\Controllers\UserSettingController::class, 'roleIndex'])->name('roles.index');
+Route::get('/settings/users/roles/create', [App\Http\Controllers\UserSettingController::class, 'roleCreate'])->name('roles.create');
+Route::post('/settings/users/roles', [App\Http\Controllers\UserSettingController::class, 'roleStore'])->name('roles.store');
+Route::get('/settings/users/roles/{id}/edit', [App\Http\Controllers\UserSettingController::class, 'roleEdit'])->name('roles.edit');
+Route::put('/settings/users/roles', [App\Http\Controllers\UserSettingController::class, 'roleUpdate'])->name('roles.update');
+Route::get('/settings/users/roles/{id}', [App\Http\Controllers\UserSettingController::class, 'roleDestroy'])->name('roles.destroy');
