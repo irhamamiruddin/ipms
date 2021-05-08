@@ -1,7 +1,17 @@
 <div class="form-row">
     <div class="form-group col-md-4">
-    {{ Form::label('business_nature', 'Business Nature') }}
-    {{ Form::select('business_nature', $business_natures, null, ['class' => 'form-control']) }}
+        {{ Form::label('business_nature', 'Business Nature') }}
+        <select name="business_nature" class="form-control">
+        @foreach ($business_natures as $key => $value)
+            <option value="{{ $key }}" 
+            @php
+            if(isset($company)) 
+                if($value == $company->business_natures->type) 
+                    echo 'selected';
+            @endphp
+            >{{ $value }}</option>
+        @endforeach
+        </select>
     </div>
     <div class="form-group col-md-4">
     {{ Form::label('company_name', 'Company Name') }}

@@ -11,8 +11,14 @@ class Company extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function businessNatures()
+    public function business_natures()
     {
-        return $this->belongsTo('App\Models\BusinessNature');
+        return $this->belongsTo('App\Models\BusinessNature', 'business_nature_id');
+    }
+
+    public function contacts()
+    {
+        return $this->belongsToMany('App\Models\Contact')
+            ->withPivot('role');
     }
 }

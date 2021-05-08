@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\BusinessNature;
+use App\Models\Contact;
 
 class CompanyController extends Controller
 {
@@ -23,9 +24,15 @@ class CompanyController extends Controller
     public function create()
     {
         $business_natures = BusinessNature::pluck('type','id');
+        $contacts = Contact::all();
+
+        $data = compact(
+            'business_natures',
+            'contacts'
+        );
 
 
-        return view('companies.create', ['business_natures'=>$business_natures]);
+        return view('companies.create', $data);
     }
 
     public function store()
@@ -50,6 +57,15 @@ class CompanyController extends Controller
 
         $companies->save();
 
+        $company = Company::find($companies->id);
+
+        $contact_id = request('contact_id');
+        $submitted_role = request('submitted_role');
+
+        for($j = 0; $j < count($contact_id); $j++) {
+            $company->contacts()->attach($contact_id[$j], ['role' => $submitted_role[$j]]);
+        }
+        
         return redirect('/companies');
     }
 
@@ -62,10 +78,18 @@ class CompanyController extends Controller
 
     public function edit($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::where('id',$id)->first();
         $business_natures = BusinessNature::pluck('type','id');
+        $contacts = Contact::all();
         
-        return view('companies.edit',['company'=>$company, 'business_natures'=>$business_natures]);
+
+        $data = compact(
+            'business_natures',
+            'company',
+            'contacts'
+        );
+        
+        return view('companies.edit', $data);
     }
 
     public function update()
@@ -91,6 +115,17 @@ class CompanyController extends Controller
         $company->remark = request('remark');
 
         $company->save();
+
+        if (request('contact_id') != NULL) {
+            // $company->contacts()->where('id', $id)->detach();
+
+            $contact_id = request('contact_id');
+            $submitted_role = request('submitted_role');
+
+            for($j = 0; $j < count($contact_id); $j++) {
+                $company->contacts()->attach($contact_id[$j], ['role' => $submitted_role[$j]]);
+            }
+        }
 
         return redirect('/companies');
     }

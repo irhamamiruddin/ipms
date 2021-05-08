@@ -34,7 +34,7 @@
                             <tbody>
                                 @foreach($companies as $company)
                                 <tr>
-                                    <td>{{$company->business_nature_id}}</td>
+                                    <td>{{$company->business_natures->type}}</td>
                                     <td>{{$company->company_name}}</td>
                                     <td>{{$company->phone}}</td>
                                     <td>{{$company->address}}</td>

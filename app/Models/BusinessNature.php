@@ -13,6 +13,6 @@ class BusinessNature extends Model
 
     public function companies()
     {
-        return $this->hasMany('App\Models\Company');
+        return $this->hasMany('App\Models\Company', 'business_nature_id');
     }
 }
