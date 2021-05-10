@@ -57,13 +57,15 @@ class CompanyController extends Controller
 
         $companies->save();
 
-        $company = Company::find($companies->id);
+        if (request('contact_id') != NULL) {
+            $company = Company::find($companies->id);
 
-        $contact_id = request('contact_id');
-        $submitted_role = request('submitted_role');
+            $contact_id = request('contact_id');
+            $submitted_role = request('submitted_role');
 
-        for($j = 0; $j < count($contact_id); $j++) {
-            $company->contacts()->attach($contact_id[$j], ['role' => $submitted_role[$j]]);
+            for($j = 0; $j < count($contact_id); $j++) {
+                $company->contacts()->attach($contact_id[$j], ['role' => $submitted_role[$j]]);
+            }
         }
         
         return redirect('/companies');

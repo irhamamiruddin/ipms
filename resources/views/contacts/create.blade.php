@@ -6,12 +6,11 @@
     </div>
 </div>
 
+{{ Form::open(['route' => 'contacts.store', 'files' => true]) }}
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                {{ Form::open(['route' => 'contacts.store', 'files' => true]) }}
-                
                 @include('contacts.form')
             </div>
         </div>
@@ -41,9 +40,8 @@
         <div class="float-right p-3">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="{{ route('contacts.index') }}" class="btn btn-secondary">Cancel</a>
-
-            {{ Form::close() }}
         </div>
     </div>
 </div>
+{{ Form::close() }}
 @endsection

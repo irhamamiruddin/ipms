@@ -10,4 +10,16 @@ class Contact extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function companies()
+    {
+        return $this->belongsToMany('App\Models\Company')
+            ->withPivot('role');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User')
+            ->withPivot('role');
+    }
 }

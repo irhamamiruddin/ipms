@@ -6,14 +6,14 @@
     </div>
 </div>
 
+{{ Form::model($contact,['route' => 'contacts.update', 'files' => true]) }}
+@method('PUT')
+{{ Form::hidden('id', $contact->id) }}
+
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                {{ Form::model($contact,['route' => 'contacts.update', 'files' => true]) }}
-                @method('PUT')
-                {{ Form::hidden('id', $contact->id) }}
-                
                 @include('contacts.form')
             </div>
         </div>
@@ -43,9 +43,8 @@
         <div class="float-right p-3">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="{{ route('contacts.index') }}" class="btn btn-secondary">Cancel</a>
-
-            {{ Form::close() }}
         </div>
     </div>
 </div>
+{{ Form::close() }}
 @endsection
