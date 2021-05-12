@@ -14,7 +14,7 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                @include('contacts.form')
+                @include('contacts.forms.main')
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="col-6 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                @include('contacts.affiliated_company')
+                @include('contacts.forms.affiliated_company')
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
     <div class="col-6 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                @include('contacts.affiliated_user')
+                @include('contacts.forms.affiliated_user')
             </div>
         </div>
     </div>

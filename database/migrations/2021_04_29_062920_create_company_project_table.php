@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProjectReliefOfficerInChargePivotTable extends Migration
+class CreateCompanyProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateProjectReliefOfficerInChargePivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_relief_officer_in_charge_pivot', function (Blueprint $table) {
-            $table->id();
+        Schema::create('company_project', function (Blueprint $table) {
+            $table->unsignedInteger('company_id',false);
             $table->unsignedInteger('project_id',false);
-            $table->unsignedInteger('user_id',false);
         });
     }
 
@@ -27,6 +26,6 @@ class CreateProjectReliefOfficerInChargePivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_relief_officer_in_charge_pivot');
+        Schema::dropIfExists('company_project');
     }
 }

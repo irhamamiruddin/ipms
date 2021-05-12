@@ -13,7 +13,7 @@
             <div class="card-body pb-0">
                 
                 
-                @include('companies.form')
+                @include('companies.forms.main')
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
         <div class="card">
             <div class="card-body pb-0">
 
-                @include('companies.person_in_charge')
+                @include('companies.forms.person_in_charge')
 
             </div>
         </div>

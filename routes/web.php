@@ -35,6 +35,15 @@ Route::get('/companies/{id}/edit', [App\Http\Controllers\CompanyController::clas
 Route::put('/companies', [App\Http\Controllers\CompanyController::class, 'update'])->name('companies.update');
 Route::get('/companies/{id}', [App\Http\Controllers\CompanyController::class, 'destroy'])->name('companies.destroy');
 
+//Projects
+Route::get('/projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('projects.index');
+Route::get('/projects/create', [App\Http\Controllers\ProjectController::class, 'create'])->name('projects.create');
+Route::post('/projects', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
+Route::get('/projects/show/{id}', [App\Http\Controllers\ProjectController::class, 'show'])->name('projects.show');
+Route::get('/projects/{id}/edit', [App\Http\Controllers\ProjectController::class, 'edit'])->name('projects.edit');
+Route::put('/projects', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
+Route::get('/projects/{id}', [App\Http\Controllers\ProjectController::class, 'destroy'])->name('projects.destroy');
+
 //Settings - Development Components
 Route::get('/settings/development-components', [App\Http\Controllers\ComponentController::class, 'index'])->name('settings.components.index');
 //Type R1

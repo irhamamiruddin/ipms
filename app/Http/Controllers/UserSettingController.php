@@ -27,8 +27,6 @@ class UserSettingController extends Controller
 
         $sp_roles = [
             'Not Specified' => 'Not Specified',
-            'Officer in Charge' => 'Officer in Charge',
-            'Relief Officer in Charge' => 'Relief Officer in Charge',
             'Beneficiaries' => 'Beneficiaries',
             'Consultant' => 'Consultant'
         ];
