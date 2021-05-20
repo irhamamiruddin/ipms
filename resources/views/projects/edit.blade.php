@@ -6,6 +6,8 @@
     </div>
 </div>
 {{ Form::model($project,['route' => 'projects.store', 'files' => true]) }}
+@method('PUT')
+{{ Form::hidden('id', $contact->id) }}
 
 <div class="row">
     <div class="col-12 grid-margin">
