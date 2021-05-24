@@ -35,6 +35,15 @@ Route::get('/companies/{id}/edit', [App\Http\Controllers\CompanyController::clas
 Route::put('/companies', [App\Http\Controllers\CompanyController::class, 'update'])->name('companies.update');
 Route::get('/companies/{id}', [App\Http\Controllers\CompanyController::class, 'destroy'])->name('companies.destroy');
 
+//Lands
+Route::get('/lands', [App\Http\Controllers\LandController::class, 'index'])->name('lands.index');
+Route::get('/lands/create', [App\Http\Controllers\LandController::class, 'create'])->name('lands.create');
+Route::post('/lands', [App\Http\Controllers\LandController::class, 'store'])->name('lands.store');
+Route::get('/lands/show/{id}', [App\Http\Controllers\LandController::class, 'show'])->name('lands.show');
+Route::get('/lands/{id}/edit', [App\Http\Controllers\LandController::class, 'edit'])->name('lands.edit');
+Route::put('/lands', [App\Http\Controllers\LandController::class, 'update'])->name('lands.update');
+Route::get('/lands/{id}', [App\Http\Controllers\LandController::class, 'destroy'])->name('lands.destroy');
+
 //Projects
 Route::get('/projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('projects.index');
 Route::get('/projects/create', [App\Http\Controllers\ProjectController::class, 'create'])->name('projects.create');

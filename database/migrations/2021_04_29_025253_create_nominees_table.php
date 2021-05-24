@@ -16,8 +16,8 @@ class CreateNomineesTable extends Migration
         Schema::create('nominees', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('land_id',false);
-            $table->boolean('type');
-            $table->unsignedInteger('item_id',false)->comment='0-contact, 1-company';
+            $table->boolean('type')->comment='0-contact, 1-company';
+            $table->unsignedInteger('item_id',false);
             $table->integer('share');
             $table->integer('total_share');
             $table->string('remarks',3000)->nullable();

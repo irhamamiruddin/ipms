@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLandAgreementPivotTable extends Migration
+class CreateAgreementLandTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class CreateLandAgreementPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('land_agreement_pivot', function (Blueprint $table) {
-            $table->id();
+        Schema::create('agreement_land', function (Blueprint $table) {
             $table->unsignedInteger('land_id',false);
             $table->unsignedInteger('registered_proprietor_nature_id',false);
             $table->date('signing_date')->nullable();
@@ -35,6 +34,6 @@ class CreateLandAgreementPivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('land_agreement_pivot');
+        Schema::dropIfExists('agreement_land');
     }
 }

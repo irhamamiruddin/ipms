@@ -45,7 +45,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{ route('lands.index') }}">
         <i class="icon-globe menu-icon"></i>
         <span class="menu-title">Lands</span>
         </a>

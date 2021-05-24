@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLandOfficerInChargePivotTable extends Migration
+class CreateLandOfficerInChargeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class CreateLandOfficerInChargePivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('land_officer_in_charge_pivot', function (Blueprint $table) {
-            $table->id();
+        Schema::create('land_officer_in_charge', function (Blueprint $table) {
             $table->unsignedInteger('land_id',false);
             $table->unsignedInteger('user_id',false);
         });
@@ -27,6 +26,6 @@ class CreateLandOfficerInChargePivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('land_officer_in_charge_pivot');
+        Schema::dropIfExists('land_officer_in_charge');
     }
 }
