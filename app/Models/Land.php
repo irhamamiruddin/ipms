@@ -31,6 +31,11 @@ class Land extends Model
         return $this->hasMany('App\Models\Beneficiary', 'land_id');
     }
 
+    public function classifications()
+    {
+        return $this->belongsTo('App\Models\LandClassification', 'classification');
+    }
+
     public function agreement()
     {
         return $this->belongsToMany('App\Models\RegisteredProprietorNature', 'agreement_land',
@@ -73,7 +78,7 @@ class Land extends Model
 
     public function ketua_kampung()
     {
-        return $this->belongsToMany('App\Models\User', 'land_ketua_kampung', 
+        return $this->belongsToMany('App\Models\Contact', 'land_ketua_kampung', 
         'land_id', 'contact_id')->withPivot('remark');
     }
 }

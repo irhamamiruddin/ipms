@@ -257,12 +257,50 @@ class LandController extends Controller
         return redirect('/lands');
     }
 
-    // public function show($id)
-    // {
-    //     $company = Company::findOrFail($id);
+    public function show($id)
+    {
+        $land = Land::findOrFail($id);
+
+        $classifications = LandClassification::pluck('classification','id');
+        $land_acquisition_status = LandAcquisitionStatus::pluck('status','id');
+        $categories_of_land = CategoriesOfLand::pluck('category','id');
+        $officers = User::where('role', 'land_staff')
+                        ->orWhere('role', 'project_staff')
+                        ->orWhere('role', 'manager')
+                        ->get();
+        $contacts = Contact::all();
+        $companies = Company::all();
+        $agreements = RegisteredProprietorNature::all();
+        $consents = Consent::all();
+
+        $units = [
+            'Hectares' => 'Hectares',
+            'Acres' => 'Acres',
+            'Metre Square' => 'Metre Square'
+        ];
+
+        $types = [
+            'NULL' => 'Select Type',
+            '0' => 'Individual',
+            '1' => 'Company'
+        ];
+
+        $data = compact(
+            'land',
+            'units',
+            'classifications',
+            'land_acquisition_status',
+            'categories_of_land',
+            'officers',
+            'contacts',
+            'types',
+            'companies',
+            'agreements',
+            'consents'
+        );
         
-    //     return view('companies.show',['company'=>$company]);
-    // }
+        return view('lands.show',$data);
+    }
 
     // public function edit($id)
     // {

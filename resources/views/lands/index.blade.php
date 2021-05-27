@@ -33,10 +33,10 @@
                             <tbody>
                             @forelse($lands as $land)
                                 <tr>
-                                    <td>{{$land->project_id}}</td>
+                                    <td>{{$land->project_id}} @if($land->project_id == NULL) None @endif</td>
                                     <td>{{$land->land_description}}</td>
                                     <td>{{$land->locality}}</td>
-                                    <td>{{$land->classification}}</td>
+                                    <td>{{$land->classifications->classification}}</td>
                                     <td>
                                         <a href="{{ route('lands.show',$land->id) }}"><i class="icon-eye p-1"></i>
                                         <a href="{{ route('lands.edit',$land->id) }}"><i class="icon-like p-1"></i>

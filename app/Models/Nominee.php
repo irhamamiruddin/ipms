@@ -10,4 +10,14 @@ class Nominee extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function contact()
+    {
+        return $this->belongsTo('App\Models\Contact', 'item_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company', 'item_id');
+    }
 }

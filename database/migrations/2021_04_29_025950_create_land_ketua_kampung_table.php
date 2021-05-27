@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLandKetuaKampungPivotTable extends Migration
+class CreateLandKetuaKampungTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class CreateLandKetuaKampungPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('land_ketua_kampung_pivot', function (Blueprint $table) {
-            $table->id();
+        Schema::create('land_ketua_kampung', function (Blueprint $table) {
             $table->unsignedInteger('land_id',false);
             $table->unsignedInteger('contact_id',false);
             $table->text('remark')->nullable();
@@ -28,6 +27,6 @@ class CreateLandKetuaKampungPivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('land_ketua_kampung_pivot');
+        Schema::dropIfExists('land_ketua_kampung');
     }
 }

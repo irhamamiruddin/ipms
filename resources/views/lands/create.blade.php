@@ -12,7 +12,7 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                @include('lands.forms.main')
+                @include('lands.forms.main', ['disable' => false])
             </div>
         </div>
     </div>

@@ -10,4 +10,9 @@ class LandClassification extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function lands()
+    {
+        return $this->hasMany('App\Models\Land', 'classification');
+    }
 }

@@ -12,4 +12,14 @@ class Beneficiary extends Model
     use SoftDeletes;
 
     protected $table = 'beneficiaries';
+
+    public function contact()
+    {
+        return $this->belongsTo('App\Models\Contact', 'item_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company', 'item_id');
+    }
 }
