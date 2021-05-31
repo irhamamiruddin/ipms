@@ -53,6 +53,15 @@ Route::get('/projects/{id}/edit', [App\Http\Controllers\ProjectController::class
 Route::put('/projects', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
 Route::get('/projects/{id}', [App\Http\Controllers\ProjectController::class, 'destroy'])->name('projects.destroy');
 
+//Libraries
+Route::get('/libraries', [App\Http\Controllers\LibraryController::class, 'index'])->name('libraries.index');
+Route::get('/libraries/create', [App\Http\Controllers\LibraryController::class, 'create'])->name('libraries.create');
+Route::post('/libraries', [App\Http\Controllers\LibraryController::class, 'store'])->name('libraries.store');
+Route::get('/libraries/show/{id}', [App\Http\Controllers\LibraryController::class, 'show'])->name('libraries.show');
+Route::get('/libraries/{id}/edit', [App\Http\Controllers\LibraryController::class, 'edit'])->name('libraries.edit');
+Route::put('/libraries', [App\Http\Controllers\LibraryController::class, 'update'])->name('libraries.update');
+Route::get('/libraries/{id}', [App\Http\Controllers\LibraryController::class, 'destroy'])->name('libraries.destroy');
+
 //Settings - Development Components
 Route::get('/settings/development-components', [App\Http\Controllers\ComponentController::class, 'index'])->name('settings.components.index');
 //Type R1

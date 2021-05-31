@@ -36,6 +36,11 @@ class Land extends Model
         return $this->belongsTo('App\Models\LandClassification', 'classification');
     }
 
+    public function project()
+    {
+        return $this->belongsTo('App\Models\Project', 'project_id');
+    }
+
     public function agreement()
     {
         return $this->belongsToMany('App\Models\RegisteredProprietorNature', 'agreement_land',

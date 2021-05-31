@@ -33,7 +33,7 @@
                             <tbody>
                             @forelse($lands as $land)
                                 <tr>
-                                    <td>{{$land->project_id}} @if($land->project_id == NULL) None @endif</td>
+                                    <td>{{$land->project->title}} @if($land->project_id == NULL) None @endif</td>
                                     <td>{{$land->land_description}}</td>
                                     <td>{{$land->locality}}</td>
                                     <td>{{$land->classifications->classification}}</td>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Company;
+use App\Models\Land;
 use App\Models\ProjectStatus;
 use App\Models\User;
 use App\Models\AmenityTypeA1;
@@ -32,6 +33,7 @@ class ProjectController extends Controller
     public function create()
     {
         $companies = Company::all();
+        $lands = Land::all();
         $project_status = ProjectStatus::pluck('project_status','id');
         $officers = User::where('role', 'land_staff')
                         ->orWhere('role', 'project_staff')
@@ -46,6 +48,7 @@ class ProjectController extends Controller
 
         $data = compact(
             'companies',
+            'lands',
             'project_status',
             'officers',
             'commercialTypeC1',
@@ -86,6 +89,18 @@ class ProjectController extends Controller
 
             for($i = 0; $i < count($roic_id); $i++) {
                 $project->relief_officer_in_charge()->attach($roic_id[$i]);
+            }
+        }
+
+        if (request('land_id') != NULL) {
+            $land_id = request('land_id');
+
+            for($i = 0; $i < count($land_id); $i++) {
+                $land = Land::findOrFail($land_id[$i]);
+
+                $land->project_id = $projects->id;
+
+                $land->save();
             }
         }
         
