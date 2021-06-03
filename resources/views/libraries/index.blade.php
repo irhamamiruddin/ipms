@@ -7,7 +7,7 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
-        <span class="card-title display-4">Contacts</span>
+        <span class="card-title display-4">Libraries</span>
     </div>
 </div>
 

@@ -43,6 +43,37 @@ class LibraryController extends Controller
         return redirect('/libraries');
     }
 
+    public function edit($id)
+    {
+        $library = Library::findOrFail($id);
+        $types = LibraryType::all();
+        $projects = Project::all();
+
+        $data = compact(
+            'library',
+            'projects',
+            'types'
+        );
+        
+        return view('libraries.edit', $data);
+    }
+
+    public function update()
+    {
+        $id = request('id');
+
+        $library = Library::findOrFail($id);
+        
+        $library->project_id = request('project');
+        $library->name = request('name');
+        $library->type = request('type');
+
+        $library->save();
+
+        
+        return redirect('/libraries');
+    }
+
     public function destroy($id){
 
         $library = Library::findOrFail($id);
