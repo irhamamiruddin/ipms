@@ -16,6 +16,11 @@ use App\Models\RegisteredProprietor;
 use App\Models\Nominee;
 use App\Models\Trustee;
 use App\Models\Beneficiary;
+use App\Models\LogNature;
+use App\Models\LogLevel1;
+use App\Models\LogLevel2;
+use App\Models\LogLevel3;
+use App\Models\LandLog;
 
 class LandController extends Controller
 {
@@ -538,5 +543,52 @@ class LandController extends Controller
 
         
         return redirect('/lands');
+    }
+
+    public function log($id){
+        $land = Land::findOrFail($id);
+
+        $data = compact(
+            'land'
+        );
+        
+        return view('lands.logs', $data);
+    }
+
+    public function add_log($id){
+        $land = Land::findOrFail($id);
+
+        $nature = LogNature::pluck('nature','nature');
+        $level_1 = LogLevel1::all();
+        $level_2 = LogLevel2::all();
+        $level_3 = LogLevel3::all();
+
+        $data = compact(
+            'land',
+            'nature',
+            'level_1',
+            'level_2',
+            'level_3'
+        );
+        
+        return view('lands.add_log', $data);
+    }
+
+    public function store_log(){
+        $id = request('land_id');
+        $logs = New LandLog();
+
+        $logs->land_id = request('land_id');
+        $logs->nature = request('nature');
+        $logs->log_date = request('date');
+        $logs->log_desc = request('description');
+        $logs->level_1 = request('level_1');
+        $logs->level_2 = request('level_2');
+        $logs->level_3 = request('level_3');
+        $logs->reminder_date = request('reminder_date');
+
+        $logs->save();
+
+        return redirect()->route('lands.log', $id);
     }
 }

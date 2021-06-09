@@ -43,6 +43,11 @@ Route::get('/lands/show/{id}', [App\Http\Controllers\LandController::class, 'sho
 Route::get('/lands/{id}/edit', [App\Http\Controllers\LandController::class, 'edit'])->name('lands.edit');
 Route::put('/lands', [App\Http\Controllers\LandController::class, 'update'])->name('lands.update');
 Route::get('/lands/{id}', [App\Http\Controllers\LandController::class, 'destroy'])->name('lands.destroy');
+Route::get('/lands/{id}/log', [App\Http\Controllers\LandController::class, 'log'])->name('lands.log');
+Route::get('/lands/{id}/add-log', [App\Http\Controllers\LandController::class, 'add_log'])->name('lands.add_log');
+Route::post('/lands/log', [App\Http\Controllers\LandController::class, 'store_log'])->name('lands.store_log');
+Route::get('/lands/{id}/edit-log', [App\Http\Controllers\LandController::class, 'edit_log'])->name('lands.edit_log');
+Route::get('/lands/log/{id}', [App\Http\Controllers\LandController::class, 'destroy_log'])->name('lands.destroy_log');
 
 //Projects
 Route::get('/projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('projects.index');

@@ -31,6 +31,11 @@ class Land extends Model
         return $this->hasMany('App\Models\Beneficiary', 'land_id');
     }
 
+    public function logs()
+    {
+        return $this->hasMany('App\Models\LandLog', 'land_id');
+    }
+
     public function classifications()
     {
         return $this->belongsTo('App\Models\LandClassification', 'classification');
