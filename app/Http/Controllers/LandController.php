@@ -580,8 +580,8 @@ class LandController extends Controller
 
         $logs->land_id = request('land_id');
         $logs->nature = request('nature');
-        $logs->log_date = request('date');
-        $logs->log_desc = request('description');
+        $logs->log_date = request('log_date');
+        $logs->log_desc = request('log_desc');
         $logs->level_1 = request('level_1');
         $logs->level_2 = request('level_2');
         $logs->level_3 = request('level_3');
@@ -590,5 +590,65 @@ class LandController extends Controller
         $logs->save();
 
         return redirect()->route('lands.log', $id);
+    }
+
+    public function edit_log($land_id, $log_id){
+        $land = Land::findOrFail($land_id);
+        $log = LandLog::findOrFail($log_id);
+
+        $nature = LogNature::pluck('nature','nature');
+        $level_1 = LogLevel1::all();
+        $level_2 = LogLevel2::all();
+        $level_3 = LogLevel3::all();
+
+        $data = compact(
+            'land',
+            'log',
+            'nature',
+            'level_1',
+            'level_2',
+            'level_3'
+        );
+        
+        return view('lands.edit_log', $data);
+    }
+
+    public function update_log(){
+        $land_id = request('land_id');
+        $log_id = request('log_id');
+        $log = LandLog::findOrFail($log_id);
+
+        $log->land_id = request('land_id');
+        $log->nature = request('nature');
+        $log->log_date = request('log_date');
+        $log->log_desc = request('log_desc');
+        $log->level_1 = request('level_1');
+        $log->level_2 = request('level_2');
+        $log->level_3 = request('level_3');
+        $log->reminder_date = request('reminder_date');
+
+        $log->save();
+
+        return redirect()->route('lands.log', $land_id);
+    }
+
+    public function check_report(){
+        $land_id = request('land_id');
+        $log_id = request('log_id');
+        $log = LandLog::findOrFail($log_id);
+
+        $log->report = request('report');
+        $log->save();
+
+        return redirect()->route('lands.log', $land_id);
+    }
+
+    public function destroy_log($land_id, $log_id){
+
+        $log = LandLog::findOrFail($log_id);
+        $log->delete();
+
+        
+        return redirect()->route('lands.log', $land_id);
     }
 }

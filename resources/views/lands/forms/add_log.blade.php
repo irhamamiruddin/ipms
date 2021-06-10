@@ -4,8 +4,8 @@
     {{ Form::select('nature', $nature, null, ['class' => 'form-control']) }}
     </div>
     <div class="form-group col-md-4">
-    {{ Form::label('date', 'Date') }}
-    {{ Form::date('date', null, ['class' => 'form-control']) }}
+    {{ Form::label('log_date', 'Date') }}
+    {{ Form::date('log_date', null, ['class' => 'form-control']) }}
     </div>
     <div class="form-group col-md-4">
     {{ Form::label('reminder_date', 'Reminder Date') }}
@@ -58,8 +58,8 @@
 </div>
 
 <div class="form-group">
-    {{ Form::label('description', 'Description') }}
-    {{ Form::textarea('description', null, ['class' => 'form-control', 'placeholder' => 'Type here...', 'rows' => '3', 'cols' => '170']) }}
+    {{ Form::label('log_desc', 'Description') }}
+    {{ Form::textarea('log_desc', null, ['class' => 'form-control', 'placeholder' => 'Type here...', 'rows' => '3', 'cols' => '170']) }}
 </div>
 
 

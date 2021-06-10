@@ -38,15 +38,22 @@
                             <tbody>
                             @forelse($land->logs as $log)
                                 <tr>
-                                    <td></td>
+                                    <td>
+                                    {{ Form::open(['route' => 'lands.check_report']) }}
+                                    @method('PUT')
+                                    {{ Form::hidden('land_id', $land->id) }}
+                                    {{ Form::hidden('log_id', $log->id) }}
+                                    <input type="checkbox" id="report{{$log->id}}" name="report" value="1" @if($log->report == 1) checked @endif>
+                                    {{ Form::close() }}
+                                    </td>
                                     <td>{{$log->log_date}}</td>
                                     <td>{{$log->nature}}</td>
                                     <td>{{$log->log_desc}}</td>
                                     <td>{{$log->reminder_date}}</td>
                                     <td></td>
                                     <td>
-                                        <a href="{{ route('lands.edit_log',$log->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('lands.destroy_log',$log->id) }}"><i class="icon-directions p-1"></i>
+                                        <a href="{{ route('lands.edit_log',['land_id' => $land->id, 'log_id' => $log->id]) }}"><i class="icon-like p-1"></i>
+                                        <a href="{{ route('lands.destroy_log',['land_id' => $land->id, 'log_id' => $log->id]) }}"><i class="icon-directions p-1"></i>
                                     </td>
                                 </tr>
                             @empty
@@ -68,4 +75,12 @@
 <script src="../../../../vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="../../../../vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="{{ asset('js/data-table.js') }}"></script>
+
+<script>
+@foreach($land->logs as $log)
+$("#report{{$log->id}}").change(function() {
+     this.form.submit();
+});
+@endforeach
+</script>
 @endpush
