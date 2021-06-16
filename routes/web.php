@@ -59,6 +59,18 @@ Route::get('/projects/show/{id}', [App\Http\Controllers\ProjectController::class
 Route::get('/projects/{id}/edit', [App\Http\Controllers\ProjectController::class, 'edit'])->name('projects.edit');
 Route::put('/projects', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
 Route::get('/projects/{id}', [App\Http\Controllers\ProjectController::class, 'destroy'])->name('projects.destroy');
+Route::get('/projects/{id}/log', [App\Http\Controllers\ProjectController::class, 'log'])->name('projects.log');
+Route::get('/projects/{id}/add-log', [App\Http\Controllers\ProjectController::class, 'add_log'])->name('projects.add_log');
+Route::post('/projects/log', [App\Http\Controllers\ProjectController::class, 'store_log'])->name('projects.store_log');
+Route::get('/projects/{project_id}/edit-log/{log_id}', [App\Http\Controllers\ProjectController::class, 'edit_log'])->name('projects.edit_log');
+Route::put('/projects/log', [App\Http\Controllers\ProjectController::class, 'update_log'])->name('projects.update_log');
+Route::put('/projects/log/report', [App\Http\Controllers\ProjectController::class, 'check_report'])->name('projects.check_report');
+Route::get('/projects/{project_id}/log/{log_id}', [App\Http\Controllers\ProjectController::class, 'destroy_log'])->name('projects.destroy_log');
+
+//Reports
+Route::get('/reports/land-logs', [App\Http\Controllers\ReportController::class, 'land_log'])->name('reports.land_log');
+Route::get('/reports/project-logs', [App\Http\Controllers\ReportController::class, 'project_log'])->name('reports.project_log');
+
 
 //Libraries
 Route::get('/libraries', [App\Http\Controllers\LibraryController::class, 'index'])->name('libraries.index');

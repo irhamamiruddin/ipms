@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LandLog extends Model
+class ProjectLog extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'land_logs';
+    protected $table = 'project_logs';
 
-    public function land()
+    public function project()
     {
-        return $this->belongsTo('App\Models\Land', 'land_id');
+        return $this->belongsTo('App\Models\Project', 'project_id');
     }
 }

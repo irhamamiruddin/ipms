@@ -2,12 +2,19 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
+        <a href="{{ route('projects.edit',$project->id) }}" class="btn btn-md btn-secondary btn-fw active">Project</a>
+        <a href="{{ route('projects.log',$project->id) }}" class="btn btn-md btn-secondary btn-fw">Log</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 grid-margin">
         <span class="card-title display-4">Edit Project</span>
     </div>
 </div>
 {{ Form::model($project,['route' => 'projects.store', 'files' => true]) }}
 @method('PUT')
-{{ Form::hidden('id', $contact->id) }}
+{{ Form::hidden('id', $project->id) }}
 
 <div class="row">
     <div class="col-12 grid-margin">

@@ -22,7 +22,7 @@ class CreateProjectLogsTable extends Migration
             $table->string('level_1',500)->nullable();
             $table->string('level_2',500)->nullable();
             $table->string('level_3',500)->nullable();
-            $table->boolean('report');
+            $table->boolean('report')->nullable();
             $table->date('reminder_date')->nullable();
             $table->boolean('reminder_date_noty')->nullable();
             $table->timestamps();

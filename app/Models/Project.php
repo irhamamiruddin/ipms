@@ -16,6 +16,16 @@ class Project extends Model
         return $this->hasMany('App\Models\ProjectDevelopmentComponent', 'project_id');
     }
 
+    public function logs()
+    {
+        return $this->hasMany('App\Models\ProjectLog', 'project_id');
+    }
+
+    public function lands()
+    {
+        return $this->hasMany('App\Models\Land', 'project_id');
+    }
+
     public function project_status()
     {
         return $this->belongsTo('App\Models\ProjectStatus', 'project_status_id');

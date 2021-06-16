@@ -36,11 +36,17 @@
                                 <tr>
                                     <td>{{$project->title}}</td>
                                     <td>{{$project->company->company_name}}</td>
-                                    <td>Size</td>
+                                    <td>
+                                        @forelse($project->lands as $land)
+                                            {{$land->size}} <br>
+                                        @empty
+                                            No Records.
+                                        @endforelse
+                                    </td>
                                     <td>{{$project->project_status->project_status}}</td>
                                     <td>
                                         @forelse($project->officer_in_charge as $oic)
-                                            {{$oic->name}}
+                                            {{$oic->name}} <br>
                                         @empty
                                             No Records.
                                         @endforelse
