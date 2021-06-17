@@ -65,7 +65,7 @@
         <ul class="nav flex-column sub-menu">
             <li class="nav-item"> <a class="nav-link" href="{{ route('reports.land_log') }}">Land Logs</a></li>
             <li class="nav-item"> <a class="nav-link" href="{{ route('reports.project_log') }}">Project Logs</a></li>
-            <li class="nav-item"> <a class="nav-link" href="#">Land Ownership</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ route('reports.land_ownerships') }}">Land Ownerships</a></li>
             <li class="nav-item"> <a class="nav-link" href="#">System Log</a></li>
         </ul>
         </div>

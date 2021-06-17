@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LandLog;
 use App\Models\ProjectLog;
+use App\Models\Land;
 
 class ReportController extends Controller
 {
@@ -33,5 +34,16 @@ class ReportController extends Controller
         );
         
         return view('reports.project_logs', $data);
+    }
+
+    public function land_ownerships()
+    {
+        $lands = Land::all();
+
+        $data = compact(
+            'lands'
+        );
+        
+        return view('reports.land_ownerships', $data);
     }
 }
