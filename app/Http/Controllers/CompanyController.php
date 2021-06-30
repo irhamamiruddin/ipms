@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\BusinessNature;
 use App\Models\Contact;
+use App\Models\ActivityLog;
+use Auth;
 
 class CompanyController extends Controller
 {
@@ -55,7 +57,16 @@ class CompanyController extends Controller
         $companies->website_url = request('website_url');
         $companies->remark = request('remark');
 
-        $companies->save();
+        if ($companies->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('company_name');
+            $log->class = "Company";
+            $log->action = "Add";
+
+            $log->save();
+        }
 
         if (request('contact_id') != NULL) {
             $company = Company::find($companies->id);
@@ -116,7 +127,17 @@ class CompanyController extends Controller
         $company->website_url = request('website_url');
         $company->remark = request('remark');
 
-        $company->save();
+        if ($company->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('company_name');
+            $log->class = "Company";
+            $log->action = "Update";
+
+            $log->save();
+        }
+        
 
         if (request('contact_id') != NULL) {
             // $company->contacts()->where('id', $id)->detach();
@@ -135,8 +156,17 @@ class CompanyController extends Controller
     public function destroy($id){
 
         $company = Company::findOrFail($id);
-        $company->delete();
 
+        if ($company->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $company->company_name;
+            $log->class = "Company";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         
         return redirect('/companies');
     }

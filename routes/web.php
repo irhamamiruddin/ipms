@@ -71,8 +71,7 @@ Route::get('/projects/{project_id}/log/{log_id}', [App\Http\Controllers\ProjectC
 Route::get('/reports/land-logs', [App\Http\Controllers\ReportController::class, 'land_log'])->name('reports.land_log');
 Route::get('/reports/project-logs', [App\Http\Controllers\ReportController::class, 'project_log'])->name('reports.project_log');
 Route::get('/reports/land-ownerships', [App\Http\Controllers\ReportController::class, 'land_ownerships'])->name('reports.land_ownerships');
-
-
+Route::get('/reports/system-log', [App\Http\Controllers\ReportController::class, 'system_log'])->name('reports.system_log');
 
 //Libraries
 Route::get('/libraries', [App\Http\Controllers\LibraryController::class, 'index'])->name('libraries.index');

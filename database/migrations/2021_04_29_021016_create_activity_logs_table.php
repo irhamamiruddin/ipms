@@ -16,10 +16,10 @@ class CreateActivityLogsTable extends Migration
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('user_id',false)->nullable();
-            $table->string('id_type',100);
-            $table->string('name',100);
-            $table->string('class',100);
-            $table->string('action',100);
+            $table->string('id_type',100)->nullable();
+            $table->string('name',100)->nullable();
+            $table->string('class',100)->nullable();
+            $table->string('action',100)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\ActivityLog;
+use Auth;
 
 class UserSettingController extends Controller
 {
@@ -53,7 +55,16 @@ class UserSettingController extends Controller
         $user->password = Hash::make(request('password'));
         $user->role = request('role');
 
-        $user->save();
+        if ($user->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "User";
+            $log->action = "Add";
+
+            $log->save();
+        }
 
         return redirect('/settings/users');
     }
@@ -99,7 +110,16 @@ class UserSettingController extends Controller
         }
         $user->role = request('role');
 
-        $user->save();
+        if ($user->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "User";
+            $log->action = "Update";
+
+            $log->save();
+        }
 
         return redirect('/settings/users');
     }
@@ -108,7 +128,16 @@ class UserSettingController extends Controller
     {
 
         $user = User::findOrFail($id);
-        $user->delete();
+        if ($user->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $user->name;
+            $log->class = "User";
+            $log->action = "Delete";
+
+            $log->save();
+        }
 
         
         return redirect('/settings/users');
@@ -133,7 +162,16 @@ class UserSettingController extends Controller
 
         $role->name = request('name');
 
-        $role->save();
+        if ($role->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "User Role";
+            $log->action = "Add";
+
+            $log->save();
+        }
 
         return redirect('/settings/users/roles/index');
     }
@@ -153,7 +191,16 @@ class UserSettingController extends Controller
 
         $role->name = request('name');
 
-        $role->save();
+        if ($role->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "User Role";
+            $log->action = "Update";
+
+            $log->save();
+        }
 
         return redirect('/settings/users/roles/index');
     }
@@ -161,7 +208,17 @@ class UserSettingController extends Controller
     public function roleDestroy($id)
     {
         $role = Role::findOrFail($id);
-        $role->delete();
+        if ($role->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $role->name;
+            $log->class = "User Role";
+            $log->action = "Delete";
+
+            $log->save();
+        }
+
 
         return redirect('/settings/users/roles/index');
     }

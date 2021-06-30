@@ -12,6 +12,8 @@ use App\Models\LandClassification;
 use App\Models\LibraryType;
 use App\Models\ProjectStatus;
 use App\Models\RegisteredProprietorNature;
+use App\Models\ActivityLog;
+use Auth;
 
 class OtherController extends Controller
 {
@@ -51,7 +53,16 @@ class OtherController extends Controller
     {
         $business_nature = New BusinessNature();
         $business_nature->type = request('type');
-        $business_nature->save();
+        if ($business_nature->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('type');
+            $log->class = "Business Nature";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateBusiness()
@@ -59,13 +70,31 @@ class OtherController extends Controller
         $id = request('id');
         $business_nature = BusinessNature::findOrFail($id);
         $business_nature->type = request('type');
-        $business_nature->save();
+        if ($business_nature->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('type');
+            $log->class = "Business Nature";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyBusiness($id)
     {
         $business_nature = BusinessNature::findOrFail($id);
-        $business_nature->delete();
+        if ($business_nature->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $business_nature->type;
+            $log->class = "Business Nature";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -74,7 +103,16 @@ class OtherController extends Controller
     {
         $categories_of_land = New CategoriesOfLand();
         $categories_of_land->category = request('category');
-        $categories_of_land->save();
+        if ($categories_of_land->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('category');
+            $log->class = "Categories of Land";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateCategory()
@@ -82,13 +120,31 @@ class OtherController extends Controller
         $id = request('id');
         $categories_of_land = CategoriesOfLand::findOrFail($id);
         $categories_of_land->category = request('category');
-        $categories_of_land->save();
+        if ($categories_of_land->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('category');
+            $log->class = "Categories of Land";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyCategory($id)
     {
         $categories_of_land = CategoriesOfLand::findOrFail($id);
-        $categories_of_land->delete();
+        if ($categories_of_land->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $categories_of_land->category;
+            $log->class = "Business Nature";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -97,7 +153,16 @@ class OtherController extends Controller
     {
         $consent = New Consent();
         $consent->consent = request('consent');
-        $consent->save();
+        if ($consent->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('consent');
+            $log->class = "Consent";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateConsent()
@@ -105,13 +170,31 @@ class OtherController extends Controller
         $id = request('id');
         $consent = Consent::findOrFail($id);
         $consent->consent = request('consent');
-        $consent->save();
+        if ($consent->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('consent');
+            $log->class = "Consent";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyConsent($id)
     {
         $consent = Consent::findOrFail($id);
-        $consent->delete();
+        if ($consent->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $consent->consent;
+            $log->class = "Consent";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -120,7 +203,16 @@ class OtherController extends Controller
     {
         $role = New ConsultantRole();
         $role->type = request('type');
-        $role->save();
+        if ($role->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('type');
+            $log->class = "Consultant Role";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateRole()
@@ -128,13 +220,31 @@ class OtherController extends Controller
         $id = request('id');
         $role = ConsultantRole::findOrFail($id);
         $role->type = request('type');
-        $role->save();
+        if ($role->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('type');
+            $log->class = "Consultant Role";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyRole($id)
     {
         $role = ConsultantRole::findOrFail($id);
-        $role->delete();
+        if ($role->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $role->type;
+            $log->class = "Consultant Role";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -143,7 +253,16 @@ class OtherController extends Controller
     {
         $status = New LandAcquisitionStatus();
         $status->status = request('status');
-        $status->save();
+        if ($status->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('status');
+            $log->class = "Land Acquisition Status";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateStatus()
@@ -151,13 +270,31 @@ class OtherController extends Controller
         $id = request('id');
         $status = LandAcquisitionStatus::findOrFail($id);
         $status->status = request('status');
-        $status->save();
+        if ($status->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('status');
+            $log->class = "Land Acquisition Status";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyStatus($id)
     {
         $status = LandAcquisitionStatus::findOrFail($id);
-        $status->delete();
+        if ($status->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $status->status;
+            $log->class = "Land Acquisition Status";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -166,7 +303,16 @@ class OtherController extends Controller
     {
         $classification = New LandClassification();
         $classification->classification = request('classification');
-        $classification->save();
+        if ($classification->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('classification');
+            $log->class = "Land Classification";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateClassification()
@@ -174,13 +320,31 @@ class OtherController extends Controller
         $id = request('id');
         $classification = LandClassification::findOrFail($id);
         $classification->classification = request('classification');
-        $classification->save();
+        if ($classification->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('classification');
+            $log->class = "Land Classification";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyClassification($id)
     {
         $classification = LandClassification::findOrFail($id);
-        $classification->delete();
+        if ($classification->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $classification->classification;
+            $log->class = "Land Classification";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -189,7 +353,16 @@ class OtherController extends Controller
     {
         $library_type = New LibraryType();
         $library_type->type = request('type');
-        $library_type->save();
+        if ($library_type->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('type');
+            $log->class = "Library Type";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateLibrary()
@@ -197,13 +370,31 @@ class OtherController extends Controller
         $id = request('id');
         $library_type = LibraryType::findOrFail($id);
         $library_type->type = request('type');
-        $library_type->save();
+        if ($library_type->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('type');
+            $log->class = "Library Type";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyLibrary($id)
     {
         $library_type = LibraryType::findOrFail($id);
-        $library_type->delete();
+        if ($library_type->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $library_type->type;
+            $log->class = "Library Type";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -212,7 +403,16 @@ class OtherController extends Controller
     {
         $status = New ProjectStatus();
         $status->project_status = request('status');
-        $status->save();
+        if ($status->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('status');
+            $log->class = "Project Status";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateProject()
@@ -220,13 +420,31 @@ class OtherController extends Controller
         $id = request('id');
         $status = ProjectStatus::findOrFail($id);
         $status->project_status = request('status');
-        $status->save();
+        if ($status->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('status');
+            $log->class = "Project Status";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyProject($id)
     {
         $status = ProjectStatus::findOrFail($id);
-        $status->delete();
+        if ($status->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $status->project_status;
+            $log->class = "Project Status";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 
@@ -235,7 +453,16 @@ class OtherController extends Controller
     {
         $nature = New RegisteredProprietorNature();
         $nature->nature = request('nature');
-        $nature->save();
+        if ($nature->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('nature');
+            $log->class = "Type of Agreement";
+            $log->action = "Add";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function updateAgreement()
@@ -243,13 +470,31 @@ class OtherController extends Controller
         $id = request('id');
         $nature = RegisteredProprietorNature::findOrFail($id);
         $nature->nature = request('nature');
-        $nature->save();
+        if ($nature->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('nature');
+            $log->class = "Type of Agreement";
+            $log->action = "Update";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
     public function destroyAgreement($id)
     {
         $nature = RegisteredProprietorNature::findOrFail($id);
-        $nature->delete();
+        if ($nature->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $nature->nature;
+            $log->class = "Type of Agreement";
+            $log->action = "Delete";
+
+            $log->save();
+        }
         return redirect('/settings/others');
     }
 }

@@ -17,6 +17,16 @@
               </thead>
 
               <tbody>
+              @forelse($expiringLands as $expiringland)
+              <tr>
+                <td><a href="{{ route('lands.show',$expiringland->id) }}">{{$expiringland->land_description}}</a></td>
+                <td>{{$expiringland->expiry_date}}</td>
+              </tr>
+              @empty
+              <tr>
+              <td>No reminder</td>
+              </tr>
+              @endforelse
               </tbody>
             </table>
           </div>
@@ -43,6 +53,17 @@
               </thead>
 
               <tbody>
+              @forelse($annualRentNextPaid as $nextpaid)
+              <tr>
+                <td><a href="{{ route('lands.show',$nextpaid->id) }}">{{$nextpaid->land_description}}</a></td>
+                <td>{{$nextpaid->annual_rent_last_paid_date}}</td>
+                <td>{{$nextpaid->annual_rent_next_paid_date}}</td>
+              </tr>
+              @empty
+              <tr>
+              <td>No reminder</td>
+              </tr>
+              @endforelse
               </tbody>
             </table>
           </div>
@@ -70,6 +91,16 @@
               </thead>
 
               <tbody>
+              @forelse($landLogs as $landlog)
+              <tr>
+                <td><a href="{{ route('lands.show',$landlog->land->id) }}">{{$landlog->land->land_description}}</a></td>
+                <td>{{$landlog->reminder_date}}</td>
+              </tr>
+              @empty
+              <tr>
+              <td>No reminder</td>
+              </tr>
+              @endforelse
               </tbody>
             </table>
           </div>
@@ -125,6 +156,16 @@
               </thead>
 
               <tbody>
+              @forelse($projectLogs as $projectlog)
+              <tr>
+                <td><a href="{{ route('projects.show',$projectlog->project->id) }}">{{$projectlog->project->title}}</a></td>
+                <td>{{$projectlog->reminder_date}}</td>
+              </tr>
+              @empty
+              <tr>
+              <td>No reminder</td>
+              </tr>
+              @endforelse
               </tbody>
             </table>
           </div>

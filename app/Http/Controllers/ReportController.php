@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\LandLog;
 use App\Models\ProjectLog;
 use App\Models\Land;
+use App\Models\ActivityLog;
 
 class ReportController extends Controller
 {
@@ -45,5 +46,16 @@ class ReportController extends Controller
         );
         
         return view('reports.land_ownerships', $data);
+    }
+
+    public function system_log()
+    {
+        $logs = ActivityLog::all();
+
+        $data = compact(
+            'logs'
+        );
+        
+        return view('reports.system_log', $data);
     }
 }

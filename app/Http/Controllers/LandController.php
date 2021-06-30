@@ -21,6 +21,8 @@ use App\Models\LogLevel1;
 use App\Models\LogLevel2;
 use App\Models\LogLevel3;
 use App\Models\LandLog;
+use App\Models\ActivityLog;
+use Auth;
 
 class LandController extends Controller
 {
@@ -106,7 +108,16 @@ class LandController extends Controller
         $lands->annual_rent_next_paid_date = request('annual_rent_next_paid_date');
         $lands->remark = request('remark');
 
-        $lands->save();
+        if ($lands->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('land_description');
+            $log->class = "Land";
+            $log->action = "Add";
+
+            $log->save();
+        }
 
         $land = Land::find($lands->id);
 
@@ -382,7 +393,16 @@ class LandController extends Controller
         $land->annual_rent_next_paid_date = request('annual_rent_next_paid_date');
         $land->remark = request('remark');
 
-        $land->save();
+        if ($land->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('land_description');
+            $log->class = "Land";
+            $log->action = "Update";
+
+            $log->save();
+        }
 
         if (request('oic_id') != NULL) {
             $oic_id = request('oic_id');
@@ -539,7 +559,16 @@ class LandController extends Controller
     public function destroy($id){
 
         $land = Land::findOrFail($id);
-        $land->delete();
+        if ($land->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $land->land_description;
+            $log->class = "Land";
+            $log->action = "Delete";
+
+            $log->save();
+        }
 
         
         return redirect('/lands');
@@ -587,7 +616,16 @@ class LandController extends Controller
         $logs->level_3 = request('level_3');
         $logs->reminder_date = request('reminder_date');
 
-        $logs->save();
+        if ($logs->save()) {
+            $activitylog = New ActivityLog();
+
+            $activitylog->user_id = Auth::id();
+            $activitylog->name = request('log_desc');
+            $activitylog->class = "Land Log";
+            $activitylog->action = "Add";
+
+            $activitylog->save();
+        }
 
         return redirect()->route('lands.log', $id);
     }
@@ -627,7 +665,16 @@ class LandController extends Controller
         $log->level_3 = request('level_3');
         $log->reminder_date = request('reminder_date');
 
-        $log->save();
+        if ($log->save()) {
+            $activitylog = New ActivityLog();
+
+            $activitylog->user_id = Auth::id();
+            $activitylog->name = request('log_desc');
+            $activitylog->class = "Land Log";
+            $activitylog->action = "Update";
+
+            $activitylog->save();
+        }
 
         return redirect()->route('lands.log', $land_id);
     }
@@ -646,7 +693,16 @@ class LandController extends Controller
     public function destroy_log($land_id, $log_id){
 
         $log = LandLog::findOrFail($log_id);
-        $log->delete();
+        if ($log->delete()) {
+            $activitylog = New ActivityLog();
+
+            $activitylog->user_id = Auth::id();
+            $activitylog->name = $log->log_desc;
+            $activitylog->class = "Land Log";
+            $activitylog->action = "Delete";
+
+            $activitylog->save();
+        }
 
         
         return redirect()->route('lands.log', $land_id);

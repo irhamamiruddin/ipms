@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Library;
 use App\Models\LibraryType;
 use App\Models\Project;
+use App\Models\ActivityLog;
+use Auth;
+
 
 class LibraryController extends Controller
 {
@@ -37,7 +40,16 @@ class LibraryController extends Controller
         $libraries->name = request('name');
         $libraries->type = request('type');
 
-        $libraries->save();
+        if ($libraries->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "Library";
+            $log->action = "Add";
+
+            $log->save();
+        }
 
         
         return redirect('/libraries');
@@ -68,7 +80,16 @@ class LibraryController extends Controller
         $library->name = request('name');
         $library->type = request('type');
 
-        $library->save();
+        if ($library->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "Library";
+            $log->action = "Update";
+
+            $log->save();
+        }
 
         
         return redirect('/libraries');
@@ -77,7 +98,16 @@ class LibraryController extends Controller
     public function destroy($id){
 
         $library = Library::findOrFail($id);
-        $library->delete();
+        if ($library->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $library->name;
+            $log->class = "Library";
+            $log->action = "Delete";
+
+            $log->save();
+        }
 
         
         return redirect('/libraries');

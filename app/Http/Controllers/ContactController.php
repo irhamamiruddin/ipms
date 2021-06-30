@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Models\Company;
 use App\Models\User;
+use App\Models\ActivityLog;
+use Auth;
 
 class ContactController extends Controller
 {
@@ -51,7 +53,16 @@ class ContactController extends Controller
         $contacts->image = request('image');
         $contacts->remark = request('remark');
 
-        $contacts->save();
+        if ($contacts->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "Contact";
+            $log->action = "Add";
+
+            $log->save();
+        }
         
 
         $contact = Contact::find($contacts->id);
@@ -118,7 +129,16 @@ class ContactController extends Controller
         $contact->image = request('image');
         $contact->remark = request('remark');
 
-        $contact->save();
+        if ($contact->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('name');
+            $log->class = "Contact";
+            $log->action = "Update";
+
+            $log->save();
+        }
 
         if (request('company_id') != NULL) {
             $company_id = request('company_id');
@@ -144,7 +164,16 @@ class ContactController extends Controller
     public function destroy($id){
 
         $contact = Contact::findOrFail($id);
-        $contact->delete();
+        if ($contact->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $contact->name;
+            $log->class = "Contact";
+            $log->action = "Delete";
+
+            $log->save();
+        }
 
         
         return redirect('/contacts');

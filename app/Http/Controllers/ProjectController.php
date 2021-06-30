@@ -20,6 +20,8 @@ use App\Models\LogLevel1;
 use App\Models\LogLevel2;
 use App\Models\LogLevel3;
 use App\Models\ProjectLog;
+use App\Models\ActivityLog;
+use Auth;
 
 class ProjectController extends Controller
 {
@@ -76,7 +78,16 @@ class ProjectController extends Controller
         $projects->company_id = request('company');
         $projects->project_status_id = request('project_status');
 
-        $projects->save();
+        if ($projects->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('title');
+            $log->class = "Project";
+            $log->action = "Add";
+
+            $log->save();
+        }
         
 
         $project = Project::find($projects->id);
@@ -196,7 +207,16 @@ class ProjectController extends Controller
         $project->company_id = request('company');
         $project->project_status_id = request('project_status');
 
-        $project->save();
+        if ($project->save()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = request('title');
+            $log->class = "Project";
+            $log->action = "Update";
+
+            $log->save();
+        }
 
         if (request('oic_id') != NULL) {
             $oic_id = request('oic_id');
@@ -263,7 +283,16 @@ class ProjectController extends Controller
     public function destroy($id){
 
         $project = Project::findOrFail($id);
-        $project->delete();
+        if ($project->delete()) {
+            $log = New ActivityLog();
+
+            $log->user_id = Auth::id();
+            $log->name = $project->title;
+            $log->class = "Project";
+            $log->action = "Delete";
+
+            $log->save();
+        }
 
         
         return redirect('/projects');
@@ -311,7 +340,16 @@ class ProjectController extends Controller
         $logs->level_3 = request('level_3');
         $logs->reminder_date = request('reminder_date');
 
-        $logs->save();
+        if ($logs->save()) {
+            $activitylog = New ActivityLog();
+
+            $activitylog->user_id = Auth::id();
+            $activitylog->name = request('log_desc');
+            $activitylog->class = "Project Log";
+            $activitylog->action = "Add";
+
+            $activitylog->save();
+        }
 
         return redirect()->route('projects.log', $id);
     }
@@ -351,7 +389,16 @@ class ProjectController extends Controller
         $log->level_3 = request('level_3');
         $log->reminder_date = request('reminder_date');
 
-        $log->save();
+        if ($log->save()) {
+            $activitylog = New ActivityLog();
+
+            $activitylog->user_id = Auth::id();
+            $activitylog->name = request('log_desc');
+            $activitylog->class = "Project Log";
+            $activitylog->action = "Update";
+
+            $activitylog->save();
+        }
 
         return redirect()->route('projects.log', $project_id);
     }
@@ -370,7 +417,16 @@ class ProjectController extends Controller
     public function destroy_log($project_id, $log_id){
 
         $log = ProjectLog::findOrFail($log_id);
-        $log->delete();
+        if ($log->delete()) {
+            $activitylog = New ActivityLog();
+
+            $activitylog->user_id = Auth::id();
+            $activitylog->name = $log->log_desc;
+            $activitylog->class = "Project Log";
+            $activitylog->action = "Delete";
+
+            $activitylog->save();
+        }
 
         
         return redirect()->route('projects.log', $project_id);
