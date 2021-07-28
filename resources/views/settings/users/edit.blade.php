@@ -10,9 +10,8 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                {{ Form::model($user,['route' => 'users.store']) }}
+                {{ Form::model($user,['route' => ['users.update', $user->id]]) }}
                 @method('PUT')
-                {{ Form::hidden('id', $user->id) }}
 
                 @include('settings.users.form')
             </div>
@@ -24,7 +23,7 @@
     <div class="col-12 grid-margin">
         <div class="float-right p-3">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="{{ route('settings.users.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>
 
             {{ Form::close() }}
         </div>

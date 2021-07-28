@@ -2,20 +2,11 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
-        <a href="{{ route('lands.edit',$land->id) }}" class="btn btn-md btn-secondary btn-fw active">Land</a>
-        <a href="{{ route('lands.log',$land->id) }}" class="btn btn-md btn-secondary btn-fw">Log</a>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12 grid-margin">
         <span class="card-title display-4">Edit Land</span>
     </div>
 </div>
-{{ Form::model($land,['route' => 'lands.store', 'files' => true]) }}
+{{ Form::model($land,['route' => ['lands.update', $land->id], 'files' => true]) }}
 @method('PUT')
-{{ Form::hidden('id', $land->id) }}
-
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">

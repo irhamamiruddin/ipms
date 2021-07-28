@@ -40,9 +40,14 @@
                                     <td>{{$company->address}}</td>
                                     <td>{{$company->email}}</td>
                                     <td>
-                                        <a href="{{ route('companies.show',$company->id) }}"><i class="icon-eye p-1"></i>
+                                        {{ Form::open(['url' => 'companies/' . $company->id]) }}
+                                        {{ Form::hidden('_method', 'DELETE') }}
+                                        <a href="{{ route('companies.show',$company->id) }}" style="color: #00B400;"><i class="icon-eye p-1"></i>
                                         <a href="{{ route('companies.edit',$company->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('companies.destroy',$company->id) }}"><i class="icon-directions p-1"></i>
+                                        <button type="submit" style="background: none; padding: 0px; border: none; color: #FF0000;">
+                                            <i class="icon-directions p-1"></i>
+                                        </button>
+                                        {{ Form::close() }}
                                     </td>
                                 </tr>
                                 @endforeach

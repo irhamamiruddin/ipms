@@ -111,10 +111,8 @@ class ContactController extends Controller
         return view('contacts.edit',$data);
     }
 
-    public function update()
+    public function update($id)
     {
-        $id = request('id');
-
         $contact = Contact::findOrFail($id);
 
         $contact->name = request('name');

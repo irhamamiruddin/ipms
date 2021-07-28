@@ -7,14 +7,10 @@
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin">
-        <a href="{{ route('lands.edit',$land->id) }}" class="btn btn-md btn-secondary btn-fw">Land</a>
-        <a href="{{ route('lands.log',$land->id) }}" class="btn btn-md btn-secondary btn-fw active">Log</a>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12 grid-margin">
+        <span class="card-title display-4">Lands</span>
         <div class="float-right">
-            <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.add_log',$land->id) }}">Add Log</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.logs.create',$land->id) }}">Add Log</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.index') }}">Back</a>
         </div>
     </div>
 </div>
@@ -33,13 +29,14 @@
                                     <th>Log</th>
                                     <th>Reminder Date</th>
                                     <th>Notification</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                             @forelse($land->logs as $log)
                                 <tr>
                                     <td>
-                                    {{ Form::open(['route' => 'lands.check_report']) }}
+                                    {{ Form::open(['route' => 'lands.logs.check_report']) }}
                                     @method('PUT')
                                     {{ Form::hidden('land_id', $land->id) }}
                                     {{ Form::hidden('log_id', $log->id) }}
@@ -52,8 +49,14 @@
                                     <td>{{$log->reminder_date}}</td>
                                     <td></td>
                                     <td>
-                                        <a href="{{ route('lands.edit_log',['land_id' => $land->id, 'log_id' => $log->id]) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('lands.destroy_log',['land_id' => $land->id, 'log_id' => $log->id]) }}"><i class="icon-directions p-1"></i>
+                                        {{ Form::open(['url' => 'lands/' . $land->id . '/logs/' . $log->id ]) }}
+                                        {{ Form::hidden('_method', 'DELETE') }}
+                                        <a href="{{ route('lands.logs.show',[$land->id, $log->id]) }}" style="color: #00B400;"><i class="icon-eye p-1"></i>
+                                        <a href="{{ route('lands.logs.edit',[$land->id, $log->id]) }}"><i class="icon-like p-1"></i>
+                                        <button type="submit" style="background: none; padding: 0px; border: none; color: #FF0000;">
+                                            <i class="icon-directions p-1"></i>
+                                        </button>
+                                        {{ Form::close() }}
                                     </td>
                                 </tr>
                             @empty

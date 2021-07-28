@@ -9,7 +9,7 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Users</span>
         <div class="float-right">
-            <a class="btn btn-inverse-primary btn-fw" href="{{ route('roles.index') }}">Roles Settings</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('user-roles.index') }}">Roles Settings</a>
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('users.create') }}">Add User</a>
         </div>
     </div>
@@ -36,8 +36,13 @@
                                     <td>{{$user->email}}</td>
                                     <td>{{$user->role}}</td>
                                     <td>
+                                        {{ Form::open(['url' => 'settings/users/' . $user->id]) }}
+                                        {{ Form::hidden('_method', 'DELETE') }}
                                         <a href="{{ route('users.edit',$user->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('users.destroy',$user->id) }}"><i class="icon-directions p-1"></i>
+                                        <button type="submit" style="background: none; padding: 0px; border: none; color: #FF0000;">
+                                            <i class="icon-directions p-1"></i>
+                                        </button>
+                                        {{ Form::close() }}
                                     </td>
                                 </tr>
                                 @endforeach

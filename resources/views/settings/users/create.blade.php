@@ -22,7 +22,7 @@
     <div class="col-12 grid-margin">
         <div class="float-right p-3">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="{{ route('settings.users.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>
 
             {{ Form::close() }}
         </div>

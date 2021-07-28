@@ -5,10 +5,8 @@
         <span class="card-title display-4">Edit Log</span>
     </div>
 </div>
-{{ Form::model($log,['route' => 'projects.update_log']) }}
+{{ Form::model($log,['route' => ['projects.logs.update', $project->id, $log->id]]) }}
 @method('PUT')
-{{ Form::hidden('project_id', $project->id) }}
-{{ Form::hidden('log_id', $log->id) }}
 
 <div class="row">
     <div class="col-12 grid-margin">
@@ -24,7 +22,7 @@
     <div class="col-12 grid-margin">
         <div class="float-right p-3">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="{{ route('projects.log', $project->id) }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('projects.logs.index', $project->id) }}" class="btn btn-secondary">Cancel</a>
         </div>
     </div>
 </div>

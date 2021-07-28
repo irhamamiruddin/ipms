@@ -9,8 +9,8 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Roles</span>
         <div class="float-right">
-            <a class="btn btn-inverse-primary btn-fw" href="{{ route('settings.users.index') }}">Back</a>
-            <a class="btn btn-inverse-primary btn-fw" href="{{ route('roles.create') }}">Add Role</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('users.index') }}">Back</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('user-roles.create') }}">Add Role</a>
         </div>
     </div>
 </div>
@@ -36,8 +36,13 @@
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <a href="{{ route('roles.edit',$role->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('roles.destroy',$role->id) }}"><i class="icon-directions p-1"></i>
+                                        {{ Form::open(['url' => 'settings/user-roles/' . $role->id]) }}
+                                        {{ Form::hidden('_method', 'DELETE') }}
+                                        <a href="{{ route('user-roles.edit',$role->id) }}"><i class="icon-like p-1"></i>
+                                        <button type="submit" style="background: none; padding: 0px; border: none; color: #FF0000;">
+                                            <i class="icon-directions p-1"></i>
+                                        </button>
+                                        {{ Form::close() }}
                                     </td>
                                 </tr>
                                 @endforeach

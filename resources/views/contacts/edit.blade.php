@@ -6,10 +6,8 @@
     </div>
 </div>
 
-{{ Form::model($contact,['route' => 'contacts.update', 'files' => true]) }}
+{{ Form::model($contact,['route' => ['contacts.update', $contact->id], 'files' => true]) }}
 @method('PUT')
-{{ Form::hidden('id', $contact->id) }}
-
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">

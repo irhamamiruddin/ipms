@@ -70,10 +70,8 @@ class LibraryController extends Controller
         return view('libraries.edit', $data);
     }
 
-    public function update()
+    public function update($id)
     {
-        $id = request('id');
-
         $library = Library::findOrFail($id);
         
         $library->project_id = request('project');

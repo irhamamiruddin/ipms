@@ -29,6 +29,7 @@
                                     <th>Status</th>
                                     <th>Officer in Charge</th>
                                     <th>Actions</th>
+                                    <th>Check Log</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,7 +39,7 @@
                                     <td>{{$project->company->company_name}}</td>
                                     <td>
                                         @forelse($project->lands as $land)
-                                            {{$land->size}} <br>
+                                            {{$land->size}} {{$land->size_unit}}<br>
                                         @empty
                                             No Records.
                                         @endforelse
@@ -52,10 +53,16 @@
                                         @endforelse
                                     </td>
                                     <td>
-                                        <a href="{{ route('projects.show',$project->id) }}"><i class="icon-eye p-1"></i>
+                                        {{ Form::open(['url' => 'projects/' . $project->id]) }}
+                                        {{ Form::hidden('_method', 'DELETE') }}
+                                        <a href="{{ route('projects.show',$project->id) }}" style="color: #00B400;"><i class="icon-eye p-1"></i>
                                         <a href="{{ route('projects.edit',$project->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('projects.destroy',$project->id) }}"><i class="icon-directions p-1"></i>
+                                        <button type="submit" style="background: none; padding: 0px; border: none; color: #FF0000;">
+                                            <i class="icon-directions p-1"></i>
+                                        </button>
+                                        {{ Form::close() }}
                                     </td>
+                                    <td><a href="{{ route('projects.logs.index',$project->id) }}" class="btn btn-inverse-primary btn-fw">Logs</a></td>
                                 </tr>
                                 @endforeach
                             </tbody>

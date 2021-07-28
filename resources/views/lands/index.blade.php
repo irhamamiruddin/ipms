@@ -28,26 +28,29 @@
                                     <th>Area</th>
                                     <th>Classification</th>
                                     <th>Actions</th>
+                                    <th>Check Log</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @forelse($lands as $land)
+                            @foreach($lands as $land)
                                 <tr>
-                                    <td>{{$land->project->title}} @if($land->project_id == NULL) None @endif</td>
+                                    <td>@if($land->project_id == NULL) None @else {{$land->project->title}} @endif</td>
                                     <td>{{$land->land_description}}</td>
                                     <td>{{$land->locality}}</td>
-                                    <td>{{$land->classifications->classification}}</td>
+                                    <td>@if($land->classification == NULL) None @else {{$land->classifications->classification}} @endif</td>
                                     <td>
-                                        <a href="{{ route('lands.show',$land->id) }}"><i class="icon-eye p-1"></i>
+                                        {{ Form::open(['url' => 'lands/' . $land->id]) }}
+                                        {{ Form::hidden('_method', 'DELETE') }}
+                                        <a href="{{ route('lands.show',$land->id) }}" style="color: #00B400;"><i class="icon-eye p-1"></i>
                                         <a href="{{ route('lands.edit',$land->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('lands.destroy',$land->id) }}"><i class="icon-directions p-1"></i>
+                                        <button type="submit" style="background: none; padding: 0px; border: none; color: #FF0000;">
+                                            <i class="icon-directions p-1"></i>
+                                        </button>
+                                        {{ Form::close() }}
                                     </td>
+                                    <td><a href="{{ route('lands.logs.index',$land->id) }}" class="btn btn-inverse-primary btn-fw">Logs</a></td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td>No record found.</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                             </tbody>
                         </table>
                     </div>

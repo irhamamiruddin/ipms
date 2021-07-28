@@ -97,10 +97,8 @@ class UserSettingController extends Controller
         return view('settings.users.edit', $data);
     }
 
-    public function update()
+    public function update($id)
     {
-        $id = request('id');
-
         $user = User::findOrFail($id);
 
         $user->name = request('name');
@@ -142,85 +140,4 @@ class UserSettingController extends Controller
         
         return redirect('/settings/users');
     }
-
-    //Roles
-    public function roleIndex()
-    {
-        $roles = Role::all();
-
-        return view('settings.users.roles.index', ['roles'=>$roles]);
-    }
-
-    public function roleCreate()
-    {
-        return view('settings.users.roles.create');
-    }
-
-    public function roleStore()
-    {
-        $role = New Role();
-
-        $role->name = request('name');
-
-        if ($role->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "User Role";
-            $log->action = "Add";
-
-            $log->save();
-        }
-
-        return redirect('/settings/users/roles/index');
-    }
-
-    public function roleEdit($id)
-    {
-        $role = Role::findOrFail($id);
-
-        return view('settings.users.roles.edit',['role'=>$role]);
-    }
-
-    public function roleUpdate()
-    {
-        $id = request('id');
-
-        $role = Role::findOrFail($id);
-
-        $role->name = request('name');
-
-        if ($role->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "User Role";
-            $log->action = "Update";
-
-            $log->save();
-        }
-
-        return redirect('/settings/users/roles/index');
-    }
-
-    public function roleDestroy($id)
-    {
-        $role = Role::findOrFail($id);
-        if ($role->delete()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = $role->name;
-            $log->class = "User Role";
-            $log->action = "Delete";
-
-            $log->save();
-        }
-
-
-        return redirect('/settings/users/roles/index');
-    }
-
 }

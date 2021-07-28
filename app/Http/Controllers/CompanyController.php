@@ -105,10 +105,8 @@ class CompanyController extends Controller
         return view('companies.edit', $data);
     }
 
-    public function update()
+    public function update($id)
     {
-        $id = request('id');
-
         $company = Company::findOrFail($id);
 
         $company->business_nature_id = request('business_nature');

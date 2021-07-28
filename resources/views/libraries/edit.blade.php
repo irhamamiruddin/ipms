@@ -7,9 +7,8 @@
     </div>
 </div>
 
-{{ Form::model($library,['route' => 'libraries.store', 'files' => true]) }}
+{{ Form::model($library,['route' => ['libraries.update', $library->id], 'files' => true]) }}
 @method('PUT')
-{{ Form::hidden('id', $library->id) }}
 
 <div class="row">
     <div class="col-12 grid-margin">

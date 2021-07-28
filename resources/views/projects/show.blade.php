@@ -96,7 +96,35 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
-                Land
+            Land
+                <table id="land-table" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Land Name</td>
+                            <td>Lot</td>
+                            <td>Block</td>
+                            <td>District</td>
+                            <td>Locality</td>
+                            <td>Land Size</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($project->lands as $land)
+                        <tr>
+                            <td>{{$land->land_description}}</td>
+                            <td>{{$land->lot}}</td>
+                            <td>{{$land->block}}</td>
+                            <td>{{$land->district}}</td>
+                            <td>{{$land->locality}}</td>
+                            <td>{{$land->size}} {{$land->size_unit}}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td>No Records.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

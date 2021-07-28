@@ -5,9 +5,8 @@
         <span class="card-title display-4">Add New Company</span>
     </div>
 </div>
-{{ Form::model($company,['route' => 'companies.store', 'files' => true]) }}
+{{ Form::model($company,['route' => ['companies.update', $company->id], 'files' => true]) }}
 @method('PUT')
-{{ Form::hidden('id', $company->id) }}
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">

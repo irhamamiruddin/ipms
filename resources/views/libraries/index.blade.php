@@ -46,8 +46,13 @@
                                     <td>Uploaded file</td>
                                     <td>{{$library->lib_type->type}}</td>
                                     <td>
+                                        {{ Form::open(['url' => 'libraries/' . $library->id]) }}
+                                        {{ Form::hidden('_method', 'DELETE') }}
                                         <a href="{{ route('libraries.edit',$library->id) }}"><i class="icon-like p-1"></i>
-                                        <a href="{{ route('libraries.destroy',$library->id) }}"><i class="icon-directions p-1"></i>
+                                        <button type="submit" style="background: none; padding: 0px; border: none; color: #FF0000;">
+                                            <i class="icon-directions p-1"></i>
+                                        </button>
+                                        {{ Form::close() }}
                                     </td>
                                 </tr>
                                 @endforeach
