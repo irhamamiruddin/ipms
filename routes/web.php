@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LandController;
 use App\Http\Controllers\LandLogController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectConsultantController;
 use App\Http\Controllers\ProjectLogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LibraryController;
@@ -43,6 +44,8 @@ Route::resource('projects', ProjectController::class);
 
 Route::put('/projects/log/report', [ProjectLogController::class, 'check_report'])->name('projects.logs.check_report');
 Route::resource('projects.logs', ProjectLogController::class);
+
+Route::resource('projects.consultants', ProjectConsultantController::class);
 
 //Reports
 Route::prefix('reports')->group(function() {

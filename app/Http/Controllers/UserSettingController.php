@@ -126,6 +126,17 @@ class UserSettingController extends Controller
     {
 
         $user = User::findOrFail($id);
+
+        if ($user->land_officer_in_charge()->exists() ||
+            $user->land_relief_officer_in_charge()->exists() ||
+            $user->project_officer_in_charge()->exists() ||
+            $user->project_relief_officer_in_charge()->exists() ||
+            $user->contacts()->exists() ||
+            $user->activity_logs()->exists()
+        ) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($user->delete()) {
             $log = New ActivityLog();
 

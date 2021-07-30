@@ -60,4 +60,12 @@
 <script src="../../../../vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="../../../../vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="{{ asset('js/data-table.js') }}"></script>
+
+<script>
+  var msg = '{{Session::get('alert')}}';
+  var exist = '{{Session::has('alert')}}';
+  if(exist){
+    alert(msg);
+  }
+</script>
 @endpush

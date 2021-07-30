@@ -10,4 +10,10 @@ class LibraryType extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function libraries()
+    {
+        return $this->hasMany('App\Models\Library', 'type');
+    }
+
 }

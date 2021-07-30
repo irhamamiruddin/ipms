@@ -12,4 +12,9 @@ class ProjectStatus extends Model
     use SoftDeletes;
 
     protected $table = 'project_status_tb';
+
+    public function projects()
+    {
+        return $this->hasMany('App\Models\Project', 'project_status_id');
+    }
 }

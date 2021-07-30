@@ -85,6 +85,11 @@ class OtherController extends Controller
     public function destroyBusiness($id)
     {
         $business_nature = BusinessNature::findOrFail($id);
+
+        if ($business_nature->companies()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($business_nature->delete()) {
             $log = New ActivityLog();
 
@@ -135,6 +140,11 @@ class OtherController extends Controller
     public function destroyCategory($id)
     {
         $categories_of_land = CategoriesOfLand::findOrFail($id);
+
+        if ($categories_of_land->lands()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($categories_of_land->delete()) {
             $log = New ActivityLog();
 
@@ -185,6 +195,11 @@ class OtherController extends Controller
     public function destroyConsent($id)
     {
         $consent = Consent::findOrFail($id);
+        
+        if ($consent->lands()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($consent->delete()) {
             $log = New ActivityLog();
 
@@ -235,6 +250,11 @@ class OtherController extends Controller
     public function destroyRole($id)
     {
         $role = ConsultantRole::findOrFail($id);
+
+        if ($role->consultants()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($role->delete()) {
             $log = New ActivityLog();
 
@@ -285,6 +305,11 @@ class OtherController extends Controller
     public function destroyStatus($id)
     {
         $status = LandAcquisitionStatus::findOrFail($id);
+        
+        if ($status->lands()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($status->delete()) {
             $log = New ActivityLog();
 
@@ -335,6 +360,11 @@ class OtherController extends Controller
     public function destroyClassification($id)
     {
         $classification = LandClassification::findOrFail($id);
+
+        if ($classification->lands()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($classification->delete()) {
             $log = New ActivityLog();
 
@@ -385,6 +415,11 @@ class OtherController extends Controller
     public function destroyLibrary($id)
     {
         $library_type = LibraryType::findOrFail($id);
+
+        if ($library_type->libraries()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($library_type->delete()) {
             $log = New ActivityLog();
 
@@ -435,6 +470,11 @@ class OtherController extends Controller
     public function destroyProject($id)
     {
         $status = ProjectStatus::findOrFail($id);
+        
+        if ($status->projects()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($status->delete()) {
             $log = New ActivityLog();
 
@@ -485,6 +525,11 @@ class OtherController extends Controller
     public function destroyAgreement($id)
     {
         $nature = RegisteredProprietorNature::findOrFail($id);
+
+        if ($nature->lands()->exists()) {
+            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+        }
+
         if ($nature->delete()) {
             $log = New ActivityLog();
 

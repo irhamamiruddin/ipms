@@ -11,4 +11,8 @@ class ConsultantRole extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public function consultants()
+    {
+        return $this->hasMany('App\Models\Consultant', 'role_id');
+    }
 }

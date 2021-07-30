@@ -13,4 +13,9 @@ class CategoriesOfLand extends Model
     use SoftDeletes;
 
     protected $table = 'categories_of_land';
+
+    public function lands()
+    {
+        return $this->hasMany('App\Models\Land', 'categories_of_land_id');
+    }
 }
