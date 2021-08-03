@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Land;
 use App\Models\LandClassification;
 use App\Models\LandAcquisitionStatus;
@@ -22,6 +24,8 @@ use App\Models\LogLevel2;
 use App\Models\LogLevel3;
 use App\Models\LandLog;
 use App\Models\ActivityLog;
+use App\Models\File;
+use App\Models\Agreement;
 use Auth;
 
 class LandController extends Controller
@@ -120,6 +124,22 @@ class LandController extends Controller
         }
 
         $land = Land::find($lands->id);
+        
+        if (request('file') != NULL) {
+            $string = Str::random(16);
+
+            $filename = request('file')->getClientOriginalName();
+            $extension = request('file')->getClientOriginalExtension();
+            $filepath = request('file')->storeAs('file', $string . '.' .$extension);
+            
+            $file = new File([
+                'filename' => $filename,
+                'extension' => $extension,
+                'filepath' => $filepath,
+            ]);
+
+            $land->files()->save($file);
+        }
 
         if (request('oic_id') != NULL) {
             $oic_id = request('oic_id');
@@ -402,6 +422,22 @@ class LandController extends Controller
             $log->save();
         }
 
+        if (request('file') != NULL) {
+            $string = Str::random(16);
+
+            $filename = request('file')->getClientOriginalName();
+            $extension = request('file')->getClientOriginalExtension();
+            $filepath = request('file')->storeAs('file', $string . '.' .$extension);
+            
+            $file = new File([
+                'filename' => $filename,
+                'extension' => $extension,
+                'filepath' => $filepath,
+            ]);
+
+            $land->files()->save($file);
+        }
+
         if (request('oic_id') != NULL) {
             $oic_id = request('oic_id');
 
@@ -570,5 +606,11 @@ class LandController extends Controller
 
         
         return redirect('/lands');
+    }
+
+    public function download($id) {
+        $file = File::find($id);
+
+        return Storage::download($file->filepath, $file->filename);
     }
 }

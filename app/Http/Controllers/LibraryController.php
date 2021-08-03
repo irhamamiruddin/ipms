@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Library;
 use App\Models\LibraryType;
 use App\Models\Project;
 use App\Models\ActivityLog;
+use App\Models\File;
 use Auth;
 
 
@@ -51,7 +54,24 @@ class LibraryController extends Controller
             $log->save();
         }
 
-        
+        $library = Library::find($libraries->id);
+
+        if (request('file') != NULL) {
+            $string = Str::random(16);
+
+            $filename = request('file')->getClientOriginalName();
+            $extension = request('file')->getClientOriginalExtension();
+            $filepath = request('file')->storeAs('file', $string . '.' .$extension);
+            
+            $file = new File([
+                'filename' => $filename,
+                'extension' => $extension,
+                'filepath' => $filepath,
+            ]);
+
+            $library->files()->save($file);
+        }
+
         return redirect('/libraries');
     }
 
@@ -89,6 +109,22 @@ class LibraryController extends Controller
             $log->save();
         }
 
+        if (request('file') != NULL) {
+            $string = Str::random(16);
+
+            $filename = request('file')->getClientOriginalName();
+            $extension = request('file')->getClientOriginalExtension();
+            $filepath = request('file')->storeAs('file', $string . '.' .$extension);
+            
+            $file = new File([
+                'filename' => $filename,
+                'extension' => $extension,
+                'filepath' => $filepath,
+            ]);
+
+            $library->files()->save($file);
+        }
+
         
         return redirect('/libraries');
     }
@@ -109,5 +145,11 @@ class LibraryController extends Controller
 
         
         return redirect('/libraries');
+    }
+
+    public function download($id) {
+        $file = File::find($id);
+
+        return Storage::download($file->filepath, $file->filename);
     }
 }

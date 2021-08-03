@@ -54,8 +54,8 @@
     {{ Form::input('text', 'csd', null, ['id' => 'csd', 'class' => 'form-control', 'placeholder' => 'Consideration']) }}
     </div>
     <div class="form-group col-md-4">
-    {{ Form::label('up', 'File Upload') }}
-    {{ Form::input('file', 'up', null, ['id' => 'upload-file', 'class' => 'form-control', 'accept' => 'image/*']) }}
+    {{ Form::label('agreement_file', 'File Upload') }}
+    {{ Form::input('file', 'agreement_file', null, ['id' => 'upload-file', 'class' => 'form-control', 'accept' => 'image/*']) }}
     </div>
 </div>
 

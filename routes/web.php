@@ -34,6 +34,7 @@ Route::resource('contacts', ContactController::class);
 Route::resource('companies', CompanyController::class);
 
 //Lands
+Route::get('/lands/download/{id}', [LandController::class, 'download'])->name('lands.download');
 Route::resource('lands', LandController::class);
 
 Route::put('/lands/log/report', [LandLogController::class, 'check_report'])->name('lands.logs.check_report');
@@ -57,6 +58,7 @@ Route::prefix('reports')->group(function() {
 
 
 //Libraries
+Route::get('/libraries/download/{id}', [LibraryController::class, 'download'])->name('libraries.download');
 Route::resource('libraries', LibraryController::class)->except([
     'create', 'show'
 ]);

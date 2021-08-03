@@ -53,7 +53,11 @@
                     </div>
                     <div class="form-group col-md-6">
                     {{ Form::label('image', 'Image Upload') }}
-                    {{ Form::input('file', 'image', $contact->image, ['class' => 'form-control', 'disabled' => true]) }}
+                    @if($contact->image == NULL)
+                    <span class="form-control">No Image Uploaded</span>
+                    @else
+                    <img class="img-fluid" src="{{  asset('storage/' . $contact->image) }}" alt="Uploaded Image">
+                    @endif
                     </div>
                 </div>
                 <div class="form-group">

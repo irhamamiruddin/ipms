@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Models\Contact;
 use App\Models\Company;
 use App\Models\User;
@@ -40,6 +42,7 @@ class ContactController extends Controller
     public function store()
     {
         $contacts = New Contact();
+        $string = Str::random(16);
 
         $contacts->name = request('name');
         $contacts->nric = request('nric');
@@ -50,7 +53,7 @@ class ContactController extends Controller
         $contacts->office_phone = request('office_phone');
         $contacts->fax_phone = request('fax_phone');
         $contacts->email = request('email');
-        $contacts->image = request('image');
+        $contacts->image = request('image')->storeAs('image',$string.'.jpg');
         $contacts->remark = request('remark');
 
         if ($contacts->save()) {
@@ -114,6 +117,7 @@ class ContactController extends Controller
     public function update($id)
     {
         $contact = Contact::findOrFail($id);
+        $string = Str::random(16);
 
         $contact->name = request('name');
         $contact->nric = request('nric');
@@ -124,7 +128,10 @@ class ContactController extends Controller
         $contact->office_phone = request('office_phone');
         $contact->fax_phone = request('fax_phone');
         $contact->email = request('email');
-        $contact->image = request('image');
+        if (!is_null(request('image'))) {
+            Storage::delete($contact->image);
+            $contact->image = request('image')->storeAs('image',$string.'.jpg');
+        }
         $contact->remark = request('remark');
 
         if ($contact->save()) {

@@ -43,7 +43,13 @@
                                 @foreach($libraries as $library)
                                 <tr>
                                     <td>{{$library->name}}</td>
-                                    <td>Uploaded file</td>
+                                    <td>
+                                        @forelse($library->files as $file)
+                                        <a href="{{ route('libraries.download',$file->id) }}">{{$file->filename}}</a><br>
+                                        @empty
+                                        No File Uploaded
+                                        @endforelse
+                                    </td>
                                     <td>{{$library->lib_type->type}}</td>
                                     <td>
                                         {{ Form::open(['url' => 'libraries/' . $library->id]) }}

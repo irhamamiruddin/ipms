@@ -36,6 +36,11 @@ class Land extends Model
         return $this->hasMany('App\Models\LandLog', 'land_id');
     }
 
+    public function files()
+    {
+        return $this->morphMany('App\Models\File', 'filable');
+    }
+
     public function classifications()
     {
         return $this->belongsTo('App\Models\LandClassification', 'classification');

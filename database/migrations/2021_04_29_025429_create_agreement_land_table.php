@@ -16,6 +16,7 @@ class CreateAgreementLandTable extends Migration
         Schema::create('agreement_land', function (Blueprint $table) {
             $table->unsignedInteger('land_id',false);
             $table->unsignedInteger('registered_proprietor_nature_id',false);
+            $table->index(['land_id', 'registered_proprietor_nature_id']);
             $table->date('signing_date')->nullable();
             $table->date('stamping_date')->nullable();
             $table->date('expiry_date')->nullable();

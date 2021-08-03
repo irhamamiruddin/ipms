@@ -124,11 +124,12 @@
 
 <div class="form-row">
     <div class="form-group col-md-4">
-    {{ Form::label('image', 'Upload Files') }}
     @if ($disable)
-    
+    {{ Form::label('file', 'Uploaded Files') }}
+    <div id="uploaded"></div>
     @else
-    {{ Form::input('file', 'image', null, ['class' => 'form-control', 'accept' => 'image/*']) }}
+    {{ Form::label('file', 'Upload Files') }}
+    {{ Form::input('file', 'file', null, ['class' => 'form-control']) }}
     @endif
     </div>
 </div>

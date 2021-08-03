@@ -325,3 +325,17 @@
     </div>
 </div>
 @endsection
+
+@push('js')
+<script>
+    $(document).ready(function() {
+        var addrow = '';
+        @forelse($land->files as $file)
+        addrow += '<a href="{{ route('lands.download',$file->id) }}">{{$file->filename}}</a><br>'
+        @empty
+        addrow += '<span class="form-control"> No File Uploaded </span>'
+        @endforelse
+        $("#uploaded").append(addrow); 
+    })
+</script>
+@endpush

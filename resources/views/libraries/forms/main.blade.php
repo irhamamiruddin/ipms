@@ -26,7 +26,7 @@
     </div>
     <div class="form-group col-md-4">
     {{ Form::label('file', 'File Upload') }}
-    {{ Form::input('file', 'file', null, ['class' => 'form-control', 'accept' => 'image/*']) }}
+    {{ Form::input('file', 'file', null, ['class' => 'form-control']) }}
     </div>
     <div class="form-group col-md-4">
         <label for="project">Library Type</label>

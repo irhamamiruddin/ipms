@@ -6,15 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Agreement extends Model
+class File extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'agreement_land';
+    protected $fillable = [
+        'filename',
+        'extension',
+        'filepath'
+    ];
 
-    public function registered_proprietor_nature()
+    public function filable()
     {
-        return $this->belongsTo('App\Models\RegisteredProprietorNature', 'registered_proprietor_nature_id');
+        return $this->morphTo();
     }
 }

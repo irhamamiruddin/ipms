@@ -16,4 +16,9 @@ class Library extends Model
         return $this->belongsTo('App\Models\LibraryType', 'type');
     }
 
+    public function files()
+    {
+        return $this->morphMany('App\Models\File', 'filable');
+    }
+
 }
