@@ -23,7 +23,7 @@
                         <table id="order-listing" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th>Title</th>
                                     <th></th>
                                     <th></th>
                                     <th>Action</th>
@@ -32,7 +32,7 @@
                             <tbody>
                                 @foreach($roles as $role)
                                 <tr>
-                                    <td>{{$role->name}}</td>
+                                    <td>{{$role->title}}</td>
                                     <td></td>
                                     <td></td>
                                     <td>
