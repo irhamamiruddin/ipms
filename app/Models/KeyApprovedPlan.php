@@ -12,4 +12,14 @@ class KeyApprovedPlan extends Model
     use SoftDeletes;
 
     protected $table = 'key_approved_plans';
+
+    public function consultant()
+    {
+        return $this->belongsTo('App\Models\Consultant', 'consultant_id');
+    }
+
+    public function files()
+    {
+        return $this->morphMany('App\Models\File', 'filable');
+    }
 }

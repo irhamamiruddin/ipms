@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="row">
+  @if ($expiringLands != '[]')
   <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body pb-0">
@@ -35,7 +36,9 @@
       </div>
     </div>
   </div>
+  @endif
 
+  @if ($annualRentNextPaid != '[]')
   <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body pb-0">
@@ -72,9 +75,9 @@
       </div>
     </div>
   </div>
-</div>
+  @endif
 
-<div class="row">
+  @if ($landLogs != '[]')
   <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body pb-0">
@@ -109,7 +112,9 @@
       </div>
     </div>
   </div>
+  @endif
 
+  @if ($expiring_kaps != '[]')
   <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body pb-0">
@@ -129,6 +134,19 @@
               </thead>
 
               <tbody>
+                @forelse($expiring_kaps as $expiring_kap)
+                <tr>
+                  <td><a href="{{ route('projects.show',$expiring_kap->consultant->project->id) }}">{{$expiring_kap->consultant->project->title}}</a></td>
+                  <td><a href="{{ route('contacts.show',$expiring_kap->consultant->contact->id) }}">{{$expiring_kap->consultant->contact->name}}</a></td>
+                  <td><a href="{{ route('projects.consultants.show',[$expiring_kap->consultant->project->id,$expiring_kap->consultant_id]) }}">{{$expiring_kap->display_name}}</a></td>
+                  <td>{{$expiring_kap->reminder_date}}</td>
+                  <td>{{$expiring_kap->expiry_date}}</td>
+                </tr>
+                @empty
+                <tr>
+                <td>No reminder</td>
+                </tr>
+                @endforelse
               </tbody>
             </table>
           </div>
@@ -137,9 +155,9 @@
       </div>
     </div>
   </div>
-</div>
+  @endif
 
-<div class="row">
+  @if ($projectLogs != '[]')
   <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body pb-0">
@@ -174,5 +192,6 @@
       </div>
     </div>
   </div>
+  @endif
 </div>
 @endsection

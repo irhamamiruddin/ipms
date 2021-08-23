@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LandLog;
 use App\Models\ProjectLog;
+use App\Models\KeyApprovedPlan;
 use DB;
 
 class DashboardController extends Controller
@@ -45,7 +46,7 @@ class DashboardController extends Controller
         ->orderBy('reminder_date', 'asc')
         ->get();
 
-        $expiring_kaps = DB::table('key_approved_plans')
+        $expiring_kaps = KeyApprovedPlan::with('consultant')
         ->where('reminder_date', '<=', $today)
         ->where('reminder_date_noty', '=', '1')
         ->orderBy('reminder_date', 'asc')

@@ -8,6 +8,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="float-right">
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('projects.index') }}">Back</a>
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('projects.logs.create',$project->id) }}">Add Log</a>
         </div>
     </div>
@@ -33,19 +34,12 @@
                             <tbody>
                             @forelse($project->logs as $log)
                                 <tr>
-                                    <td>
-                                    {{ Form::open(['route' => 'projects.logs.check_report']) }}
-                                    @method('PUT')
-                                    {{ Form::hidden('project_id', $project->id) }}
-                                    {{ Form::hidden('log_id', $log->id) }}
-                                    <input type="checkbox" id="report{{$log->id}}" name="report" value="1" @if($log->report == 1) checked @endif>
-                                    {{ Form::close() }}
-                                    </td>
+                                    <td><input type="checkbox" id="report{{$log->id}}" name="report" value="1" @if($log->report == 1) checked @endif></td>
                                     <td>{{$log->log_date}}</td>
                                     <td>{{$log->nature}}</td>
                                     <td>{{$log->log_desc}}</td>
                                     <td>{{$log->reminder_date}}</td>
-                                    <td></td>
+                                    <td><input type="checkbox" id="reminder_date_noty{{$log->id}}" name="reminder_date_noty" value="1" @if($log->reminder_date_noty == 1) checked @endif></td>
                                     <td>
                                         {{ Form::open(['url' => 'projects/' . $project->id . '/logs/' . $log->id ]) }}
                                         {{ Form::hidden('_method', 'DELETE') }}
@@ -79,9 +73,57 @@
 
 <script>
 @foreach($project->logs as $log)
-$("#report{{$log->id}}").change(function() {
-     this.form.submit();
-});
+    $(document).ready(function(){
+        $("#report{{$log->id}}").click(function(){
+            if ($("#report{{$log->id}}").is(":checked")) {
+                    var report = 1;
+            } else {
+                var report = 0;
+            }
+
+            $.ajax({
+                url: "{{ route('projects.logs.update_report',[$project->id,$log->id]) }}",
+                method: 'PUT',
+                data:{
+                    report:report,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(data){
+                    console.log(data);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            });
+        });
+    });
+@endforeach
+
+@foreach($project->logs as $log)
+    $(document).ready(function(){
+        $("#reminder_date_noty{{$log->id}}").click(function(){
+            if ($("#reminder_date_noty{{$log->id}}").is(":checked")) {
+                    var reminder_date_noty = 1;
+            } else {
+                var reminder_date_noty = 0;
+            }
+
+            $.ajax({
+                url: "{{ route('projects.logs.update_noty',[$project->id,$log->id]) }}",
+                method: 'PUT',
+                data:{
+                    reminder_date_noty:reminder_date_noty,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(data){
+                    console.log(data);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            });
+        });
+    });
 @endforeach
 </script>
 @endpush

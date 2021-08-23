@@ -9,8 +9,8 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Lands</span>
         <div class="float-right">
-            <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.logs.create',$land->id) }}">Add Log</a>
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.index') }}">Back</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.logs.create',$land->id) }}">Add Log</a>
         </div>
     </div>
 </div>

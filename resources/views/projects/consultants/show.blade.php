@@ -31,16 +31,24 @@
                                     <td>Approved Date</td>
                                     <td>Expiry Date</td>
                                     <td>Reminder Date</td>
+                                    <td>Notification</td>
                                 </tr>
                             </thead>
                             <tbody id="kap">
                                 @forelse($consultant->key_approved_plans as $kap)
                                 <tr>
-                                    <td>File uploaded</td>
+                                    <td>
+                                    @forelse($kap->files as $file)
+                                    <a href="{{ route('projects.consultants.download',$file->id) }}">{{$file->filename}}</a><br>
+                                    @empty
+                                    No File Uploaded
+                                    @endforelse
+                                    </td>
                                     <td>{{$kap->display_name}}</td>
                                     <td>{{$kap->approved_date}}</td>
                                     <td>{{$kap->expiry_date}}</td>
                                     <td>{{$kap->reminder_date}}</td>
+                                    <td><input type="checkbox" id="reminder_date_noty{{$kap->id}}" name="reminder_date_noty" value="1" @if($kap->reminder_date_noty == 1) checked @endif></td>
                                 </tr>
                                 @empty
                                 <td>No plan recorded.</td>
@@ -55,3 +63,35 @@
 </div>
 {{ Form::close() }}
 @endsection
+
+@push('js')
+<script>
+    @forelse($consultant->key_approved_plans as $kap)
+        $(document).ready(function(){
+            $("#reminder_date_noty{{$kap->id}}").click(function(){
+                if ($("#reminder_date_noty{{$kap->id}}").is(":checked")) {
+                        var reminder_date_noty = 1;
+                } else {
+                    var reminder_date_noty = 0;
+                }
+
+                $.ajax({
+                    url: "{{ route('projects.consultants.update_noty',[$consultant->project_id,$kap->id]) }}",
+                    method: 'PUT',
+                    data:{
+                        reminder_date_noty:reminder_date_noty,
+                        _token: '{{csrf_token()}}'
+                    },
+                    success: function(data){
+                        console.log(data);
+                    },
+                    error: function (data, textStatus, errorThrown) {
+                        console.log(data);
+                    },
+                });
+            });
+        });
+    @empty
+    @endforelse
+</script>
+@endpush

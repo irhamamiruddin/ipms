@@ -1,7 +1,7 @@
 <div class="form-row">
     <div class="form-group col-md-4">
-    {{ Form::label('upload', 'Upload Files') }}
-    {{ Form::input('file', 'upload', null, ['class' => 'form-control', 'accept' => 'image/*']) }}
+    {{ Form::label('file', 'Upload Files') }}
+    {{ Form::input('file', 'file', null, ['class' => 'form-control']) }}
     </div>
     <div class="form-group col-md-3">
     {{ Form::label('display_name', 'Display Name') }}

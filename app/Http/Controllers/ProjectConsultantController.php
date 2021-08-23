@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Project;
 use App\Models\Consultant;
 use App\Models\KeyApprovedPlan;
 use App\Models\ConsultantRole;
 use App\Models\Contact;
 use App\Models\ActivityLog;
+use App\Models\File;
 use Auth;
 
 class ProjectConsultantController extends Controller
@@ -83,6 +86,23 @@ class ProjectConsultantController extends Controller
                     $activitylog->save();
                 }
             }
+            $kp = KeyApprovedPlan::find($kap->id);
+
+            if (request('file') != NULL) {
+                $string = Str::random(16);
+
+                $filename = request('file')->getClientOriginalName();
+                $extension = request('file')->getClientOriginalExtension();
+                $filepath = request('file')->storeAs('file', $string . '.' .$extension);
+                
+                $file = new File([
+                    'filename' => $filename,
+                    'extension' => $extension,
+                    'filepath' => $filepath,
+                ]);
+
+                $kp->files()->save($file);
+            }
         }
 
         return redirect()->route('projects.consultants.index', $id);
@@ -151,6 +171,24 @@ class ProjectConsultantController extends Controller
                     $activitylog->save();
                 }
             }
+
+            $kp = KeyApprovedPlan::find($kap->id);
+            
+            if (request('file') != NULL) {
+                $string = Str::random(16);
+
+                $filename = request('file')->getClientOriginalName();
+                $extension = request('file')->getClientOriginalExtension();
+                $filepath = request('file')->storeAs('file', $string . '.' .$extension);
+                
+                $file = new File([
+                    'filename' => $filename,
+                    'extension' => $extension,
+                    'filepath' => $filepath,
+                ]);
+
+                $kp->files()->save($file);
+            }
         }
 
         return redirect()->route('projects.consultants.index', $project_id);
@@ -171,6 +209,21 @@ class ProjectConsultantController extends Controller
         }
 
         
+        return redirect()->route('projects.consultants.index', $project_id);
+    }
+
+    public function download($id) {
+        $file = File::find($id);
+
+        return Storage::download($file->filepath, $file->filename);
+    }
+
+    public function update_noty($project_id, $kap_id) {
+        $kap = KeyApprovedPlan::findOrFail($kap_id);
+
+        $kap->reminder_date_noty = request('reminder_date_noty');
+        $kap->save();
+
         return redirect()->route('projects.consultants.index', $project_id);
     }
 }

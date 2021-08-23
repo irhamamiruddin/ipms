@@ -43,9 +43,12 @@ Route::resource('lands.logs', LandLogController::class);
 //Projects
 Route::resource('projects', ProjectController::class);
 
-Route::put('/projects/log/report', [ProjectLogController::class, 'check_report'])->name('projects.logs.check_report');
+Route::put('/projects/{project_id}/log/{log_id}/report', [ProjectLogController::class, 'update_report'])->name('projects.logs.update_report');
+Route::put('/projects/{project_id}/log/{log_id}/noty', [ProjectLogController::class, 'update_noty'])->name('projects.logs.update_noty');
 Route::resource('projects.logs', ProjectLogController::class);
 
+Route::get('/projects/consultants/download/{id}', [ProjectConsultantController::class, 'download'])->name('projects.consultants.download');
+Route::put('/projects/{project_id}/kap/{kap_id}/noty', [ProjectConsultantController::class, 'update_noty'])->name('projects.consultants.update_noty');
 Route::resource('projects.consultants', ProjectConsultantController::class);
 
 //Reports

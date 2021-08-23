@@ -160,12 +160,19 @@ class ProjectLogController extends Controller
         return redirect()->route('projects.logs.index', $project_id);
     }
 
-    public function check_report(){
-        $project_id = request('project_id');
-        $log_id = request('log_id');
+    public function update_report($project_id, $log_id){
         $log = ProjectLog::findOrFail($log_id);
 
         $log->report = request('report');
+        $log->save();
+
+        return redirect()->route('projects.logs.index', $project_id);
+    }
+
+    public function update_noty($project_id, $log_id) {
+        $log = ProjectLog::findOrFail($log_id);
+
+        $log->reminder_date_noty = request('reminder_date_noty');
         $log->save();
 
         return redirect()->route('projects.logs.index', $project_id);
