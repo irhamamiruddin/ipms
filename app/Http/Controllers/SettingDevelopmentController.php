@@ -12,11 +12,13 @@ use App\Models\ResidentialTypeR3;
 use App\Models\ActivityLog;
 use Auth;
 
-class ComponentController extends Controller
+class SettingDevelopmentController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:setting-development');
     }
 
     public function index()

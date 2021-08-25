@@ -28,6 +28,11 @@ class ProjectController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:project-index', ['only' => ['index']]);
+        $this->middleware('can:project-create', ['only' => ['create']]);
+        $this->middleware('can:project-edit', ['only' => ['edit']]);
+        $this->middleware('can:project-destroy', ['only' => ['destroy']]);
     }
 
     public function index()

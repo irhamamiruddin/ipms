@@ -18,7 +18,7 @@ class Library extends Model
 
     public function files()
     {
-        return $this->morphMany('App\Models\File', 'filable');
+        return $this->morphMany('App\Models\File', 'fileable');
     }
 
 }

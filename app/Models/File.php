@@ -17,7 +17,7 @@ class File extends Model
         'filepath'
     ];
 
-    public function filable()
+    public function fileable()
     {
         return $this->morphTo();
     }

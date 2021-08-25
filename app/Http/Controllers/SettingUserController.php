@@ -9,11 +9,13 @@ use App\Models\Role;
 use App\Models\ActivityLog;
 use Auth;
 
-class UserSettingController extends Controller
+class SettingUserController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:setting-user');
     }
 
     public function index()

@@ -33,6 +33,12 @@ class LandController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:land-index', ['only' => ['index']]);
+        $this->middleware('can:land-create', ['only' => ['create']]);
+        $this->middleware('can:land-edit', ['only' => ['edit']]);
+        $this->middleware('can:land-destroy', ['only' => ['destroy']]);
+        $this->middleware('can:land-download', ['only' => ['download']]);
     }
 
     public function index()

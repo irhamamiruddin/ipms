@@ -13,6 +13,11 @@ class ReportController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:report-land_log', ['only' => ['land_log']]);
+        $this->middleware('can:report-project_log', ['only' => ['project_log']]);
+        $this->middleware('can:report-land_ownerships', ['only' => ['land_ownerships']]);
+        $this->middleware('can:report-system_log', ['only' => ['system_log']]);
     }
 
     public function land_log()

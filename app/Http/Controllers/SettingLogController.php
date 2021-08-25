@@ -10,11 +10,14 @@ use App\Models\LogLevel3;
 use App\Models\ActivityLog;
 use Auth;
 
-class LogSettingController extends Controller
+
+class SettingLogController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:setting-log');
     }
 
     public function index()

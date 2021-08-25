@@ -15,11 +15,13 @@ use App\Models\RegisteredProprietorNature;
 use App\Models\ActivityLog;
 use Auth;
 
-class OtherController extends Controller
+class SettingOtherController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:setting-other');
     }
 
     public function index()

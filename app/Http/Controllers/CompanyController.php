@@ -14,6 +14,11 @@ class CompanyController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('can:company-index', ['only' => ['index']]);
+        $this->middleware('can:company-create', ['only' => ['create']]);
+        $this->middleware('can:company-edit', ['only' => ['edit']]);
+        $this->middleware('can:company-destroy', ['only' => ['destroy']]);
     }
 
     public function index()
