@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\ActivityLog;
+use App\Models\User;
 use Auth;
+use Bouncer;
 
 class UserRoleController extends Controller
 {
@@ -18,52 +20,77 @@ class UserRoleController extends Controller
 
     public function create()
     {
-        return view('settings.users.roles.create');
+        $abilities = Bouncer::ability()->all()->sortBy('name');
+        $modules = ['Contact','Company','Land','Project','Report','Library','Setting'];
+
+        return view('settings.users.roles.create', ['abilities'=>$abilities, 'modules'=>$modules]);
     }
 
     public function store()
     {
-        $role = New Role();
-
-        $role->name = request('name');
-
-        if ($role->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "User Role";
-            $log->action = "Add";
-
-            $log->save();
+        $abilities = request('abilities');
+        if (empty($abilities)) {
+           $abilities= [];
         }
+
+        $name = request('name');
+        $title = request('title');
+
+        $role = Bouncer::role()->firstOrCreate([ 'name' => $name, 'title' => $title, ]);
+        
+        Bouncer::sync($role)->abilities($abilities);
+
+        $log = New ActivityLog();
+
+        $log->user_id = Auth::id();
+        $log->name = request('title');
+        $log->class = "User Role";
+        $log->action = "Add";
+
+        $log->save();
 
         return redirect('/settings/user-roles');
     }
 
     public function edit($id)
     {
-        $role = Role::findOrFail($id);
+        $role = Bouncer::role()->where('id', $id)->first();
+        $role->abilities = $role->getAbilities();
+        $abilities = Bouncer::ability()->all()->sortBy('name');
+        $modules = ['Contact','Company','Land','Project','Report','Library','Setting'];
 
-        return view('settings.users.roles.edit',['role'=>$role]);
+        $data = compact(
+            'role',
+            'abilities',
+            'modules'
+        );
+
+        return view('settings.users.roles.edit', $data);
     }
 
     public function update($id)
     {
-        $role = Role::findOrFail($id);
+        $abilities = request('abilities');
+        if (empty($abilities)) {
+           $abilities= [];
+        }
+
+        $role = Bouncer::role()->where('id', $id)->first();
 
         $role->name = request('name');
+        $role->title = request('title');
+        $role->save();
 
-        if ($role->save()) {
-            $log = New ActivityLog();
+        Bouncer::sync($role)->abilities($abilities);
 
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "User Role";
-            $log->action = "Update";
+        $log = New ActivityLog();
 
-            $log->save();
-        }
+        $log->user_id = Auth::id();
+        $log->name = request('title');
+        $log->class = "User Role";
+        $log->action = "Update";
+
+        $log->save();
 
         return redirect('/settings/user-roles');
     }

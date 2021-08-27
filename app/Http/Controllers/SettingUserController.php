@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\ActivityLog;
 use Auth;
+use Bouncer;
 
 class SettingUserController extends Controller
 {
@@ -27,22 +28,10 @@ class SettingUserController extends Controller
 
     public function create()
     {
-        $roles = Role::pluck('name','name');
-
-        $sp_roles = [
-            'Not Specified' => 'Not Specified',
-            'Beneficiaries' => 'Beneficiaries',
-            'Consultant' => 'Consultant'
-        ];
-        $status = [
-            'Active' => 'Active',
-            'Not Active' => 'Not Active'
-        ];
+        $roles = Role::all();
 
         $data = compact(
-            'roles',
-            'sp_roles',
-            'status'
+            'roles'
         );
 
         return view('settings.users.create', $data);
@@ -55,7 +44,8 @@ class SettingUserController extends Controller
         $user->name = request('name');
         $user->email = request('email');
         $user->password = Hash::make(request('password'));
-        $user->role = request('role');
+        $user->status = request('status');
+        $role = request('role');
 
         if ($user->save()) {
             $log = New ActivityLog();
@@ -68,6 +58,8 @@ class SettingUserController extends Controller
             $log->save();
         }
 
+        Bouncer::assign($role)->to($user);
+
         return redirect('/settings/users');
     }
 
@@ -75,25 +67,14 @@ class SettingUserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $roles = Role::pluck('name','name');
+        $roles = Role::all();
 
-        $sp_roles = [
-            'Not Specified' => 'Not Specified',
-            'Officer in Charge' => 'Officer in Charge',
-            'Relief Officer in Charge' => 'Relief Officer in Charge',
-            'Beneficiaries' => 'Beneficiaries',
-            'Consultant' => 'Consultant'
-        ];
-        $status = [
-            'Active' => 'Active',
-            'Not Active' => 'Not Active'
-        ];
+        $user_role = $user->roles->first();
 
         $data = compact(
             'user',
             'roles',
-            'sp_roles',
-            'status'
+            'user_role'
         );
 
         return view('settings.users.edit', $data);
@@ -108,7 +89,8 @@ class SettingUserController extends Controller
         if(request('password') != NULL) {
             $user->password = Hash::make(request('password'));
         }
-        $user->role = request('role');
+        $user->status = request('status');
+        $role = request('role');
 
         if ($user->save()) {
             $log = New ActivityLog();
@@ -120,6 +102,8 @@ class SettingUserController extends Controller
 
             $log->save();
         }
+
+        Bouncer::sync($user)->roles($role);
 
         return redirect('/settings/users');
     }
