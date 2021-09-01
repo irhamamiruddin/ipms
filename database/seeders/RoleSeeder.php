@@ -50,6 +50,8 @@ class RoleSeeder extends Seeder
         Bouncer::allow('manager')->to('setting-development');
         Bouncer::allow('manager')->to('setting-log');
         Bouncer::allow('manager')->to('setting-other');
+        Bouncer::allow('manager')->to('assign-oic');
+        Bouncer::allow('manager')->to('add-beneficiary');
 
         Bouncer::allow('project_officer')->to('contact-index');
         Bouncer::allow('project_officer')->to('contact-create');

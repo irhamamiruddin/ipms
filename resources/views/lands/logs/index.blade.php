@@ -33,7 +33,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @forelse($land->logs as $log)
+                            @foreach($land->logs as $log)
                                 <tr>
                                     <td>
                                     {{ Form::open(['route' => 'lands.logs.check_report']) }}
@@ -59,11 +59,7 @@
                                         {{ Form::close() }}
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td>No record found.</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                             </tbody>
                         </table>
                     </div>

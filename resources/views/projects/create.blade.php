@@ -17,6 +17,7 @@
     </div>
 </div>
 
+@can('assign-oic')
 <div class="row">
     <div class="col-6 grid-margin">
         <div class="card">
@@ -34,6 +35,7 @@
         </div>
     </div>
 </div>
+@endcan
 
 <div class="row">
     <div class="col-12 grid-margin">

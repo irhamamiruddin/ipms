@@ -22,7 +22,7 @@ class CreateLandsTable extends Migration
             $table->integer('block')->nullable();
             $table->string('district', 2000)->nullable();
             $table->decimal('size', 11,2)->nullable();
-            $table->string('size_unit', 10)->nullable();
+            $table->string('size_unit', 100)->nullable();
             $table->string('locality', 2000)->nullable();
             $table->integer('classification')->nullable();
             $table->integer('term')->nullable();
@@ -44,7 +44,7 @@ class CreateLandsTable extends Migration
             $table->date('trustee_instrument_registered_date')->nullable();
             $table->decimal('price', 11,2)->nullable();
             $table->decimal('gps_land_size', 11,2)->nullable();
-            $table->string('gps_land_size_unit', 10)->nullable();
+            $table->string('gps_land_size_unit', 100)->nullable();
             $table->date('date_of_registration')->nullable();
             $table->string('annual_rent', 191)->nullable();
             $table->unsignedInteger('land_acquisition_status_id')->nullable();
