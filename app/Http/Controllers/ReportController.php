@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\LandOwnershipFromView;
+use App\Exports\LandLogFromView;
+use App\Exports\ProjectLogFromView;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LandLog;
 use App\Models\ProjectLog;
 use App\Models\Land;
@@ -62,5 +66,17 @@ class ReportController extends Controller
         );
         
         return view('reports.system_log', $data);
+    }
+
+    public function land_log_export() {
+        return Excel::download(new LandLogFromView, 'land_logs.xlsx');
+    }
+
+    public function project_log_export() {
+        return Excel::download(new ProjectLogFromView, 'project_logs.xlsx');
+    }
+
+    public function land_ownerships_export() {
+        return Excel::download(new LandOwnershipFromView, 'land_ownerships.xlsx');
     }
 }

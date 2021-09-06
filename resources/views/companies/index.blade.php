@@ -9,7 +9,7 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Companies</span>
         <div class="float-right">
-            <a class="btn btn-inverse-primary btn-fw" >Export</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('companies.export') }}">Export</a>
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('companies.create') }}">Add Company</a>
         </div>
     </div>

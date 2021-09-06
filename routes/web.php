@@ -28,19 +28,23 @@ Auth::routes();
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 //Contacts
+Route::get('/contacts/export/', [ContactController::class, 'export'])->name('contacts.export');
 Route::resource('contacts', ContactController::class);
 
 //Companies
+Route::get('/companies/export/', [CompanyController::class, 'export'])->name('companies.export');
 Route::resource('companies', CompanyController::class);
 
 //Lands
 Route::get('/lands/download/{id}', [LandController::class, 'download'])->name('lands.download');
+Route::get('/lands/export/', [LandController::class, 'export'])->name('lands.export');
 Route::resource('lands', LandController::class);
 
 Route::put('/lands/log/report', [LandLogController::class, 'check_report'])->name('lands.logs.check_report');
 Route::resource('lands.logs', LandLogController::class);
 
 //Projects
+Route::get('/projects/export/', [ProjectController::class, 'export'])->name('projects.export');
 Route::resource('projects', ProjectController::class);
 
 Route::put('/projects/{project_id}/log/{log_id}/report', [ProjectLogController::class, 'update_report'])->name('projects.logs.update_report');
@@ -54,8 +58,14 @@ Route::resource('projects.consultants', ProjectConsultantController::class);
 //Reports
 Route::prefix('reports')->group(function() {
     Route::get('/land-logs', [ReportController::class, 'land_log'])->name('reports.land_log');
+    Route::get('/land-logs/export/', [ReportController::class, 'land_log_export'])->name('reports.land_log.export');
+
     Route::get('/project-logs', [ReportController::class, 'project_log'])->name('reports.project_log');
+    Route::get('/project-logs/export/', [ReportController::class, 'project_log_export'])->name('reports.project_log.export');
+    
     Route::get('/land-ownerships', [ReportController::class, 'land_ownerships'])->name('reports.land_ownerships');
+    Route::get('/land-ownerships/export/', [ReportController::class, 'land_ownerships_export'])->name('reports.land_ownerships.export');
+
     Route::get('/system-log', [ReportController::class, 'system_log'])->name('reports.system_log');
 });
 

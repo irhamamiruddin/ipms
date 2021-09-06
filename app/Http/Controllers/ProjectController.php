@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProjectFromView;
 use App\Models\Project;
 use App\Models\Company;
 use App\Models\Land;
@@ -299,5 +301,9 @@ class ProjectController extends Controller
 
         
         return redirect('/projects');
+    }
+
+    public function export() {
+        return Excel::download(new ProjectFromView, 'projects.xlsx');
     }
 }

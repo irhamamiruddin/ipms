@@ -9,7 +9,7 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Land Logs</span>
         <div class="float-right">
-            <a class="btn btn-inverse-primary btn-fw" >Export</a>
+            <a class="btn btn-inverse-primary btn-fw" href="{{ route('reports.land_log.export') }}">Export</a>
         </div>
     </div>
 </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LandFromView;
 use App\Models\Land;
 use App\Models\LandClassification;
 use App\Models\LandAcquisitionStatus;
@@ -618,5 +620,9 @@ class LandController extends Controller
         $file = File::find($id);
 
         return Storage::download($file->filepath, $file->filename);
+    }
+
+    public function export() {
+        return Excel::download(new LandFromView, 'lands.xlsx');
     }
 }

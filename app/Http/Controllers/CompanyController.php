@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CompanyFromView;
 use App\Models\Company;
 use App\Models\BusinessNature;
 use App\Models\Contact;
@@ -172,5 +174,9 @@ class CompanyController extends Controller
         }
         
         return redirect('/companies');
+    }
+
+    public function export() {
+        return Excel::download(new CompanyFromView, 'companies.xlsx');
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Exports\ContactFromView;
 use App\Models\Contact;
 use App\Models\Company;
 use App\Models\User;
@@ -187,5 +189,9 @@ class ContactController extends Controller
 
         
         return redirect('/contacts');
+    }
+
+    public function export() {
+        return Excel::download(new ContactFromView, 'contacts.xlsx');
     }
 }
