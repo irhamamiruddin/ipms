@@ -35,19 +35,12 @@
                             <tbody>
                             @foreach($land->logs as $log)
                                 <tr>
-                                    <td>
-                                    {{ Form::open(['route' => 'lands.logs.check_report']) }}
-                                    @method('PUT')
-                                    {{ Form::hidden('land_id', $land->id) }}
-                                    {{ Form::hidden('log_id', $log->id) }}
-                                    <input type="checkbox" id="report{{$log->id}}" name="report" value="1" @if($log->report == 1) checked @endif>
-                                    {{ Form::close() }}
-                                    </td>
+                                    <td><input type="checkbox" id="report{{$log->id}}" name="report" value="1" @if($log->report == 1) checked @endif></td>
                                     <td>{{$log->log_date}}</td>
                                     <td>{{$log->nature}}</td>
                                     <td>{{$log->log_desc}}</td>
                                     <td>{{$log->reminder_date}}</td>
-                                    <td></td>
+                                    <td><input type="checkbox" id="reminder_date_noty{{$log->id}}" name="reminder_date_noty" value="1" @if($log->reminder_date_noty == 1) checked @endif></td>
                                     <td>
                                         {{ Form::open(['url' => 'lands/' . $land->id . '/logs/' . $log->id ]) }}
                                         {{ Form::hidden('_method', 'DELETE') }}
@@ -77,9 +70,57 @@
 
 <script>
 @foreach($land->logs as $log)
-$("#report{{$log->id}}").change(function() {
-     this.form.submit();
-});
+    $(document).ready(function(){
+        $("#report{{$log->id}}").click(function(){
+            if ($("#report{{$log->id}}").is(":checked")) {
+                    var report = 1;
+            } else {
+                var report = 0;
+            }
+
+            $.ajax({
+                url: "{{ route('lands.logs.update_report',[$land->id,$log->id]) }}",
+                method: 'PUT',
+                data:{
+                    report:report,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(data){
+                    console.log(data);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            });
+        });
+    });
+@endforeach
+
+@foreach($land->logs as $log)
+    $(document).ready(function(){
+        $("#reminder_date_noty{{$log->id}}").click(function(){
+            if ($("#reminder_date_noty{{$log->id}}").is(":checked")) {
+                    var reminder_date_noty = 1;
+            } else {
+                var reminder_date_noty = 0;
+            }
+
+            $.ajax({
+                url: "{{ route('lands.logs.update_noty',[$land->id,$log->id]) }}",
+                method: 'PUT',
+                data:{
+                    reminder_date_noty:reminder_date_noty,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(data){
+                    console.log(data);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            });
+        });
+    });
 @endforeach
 </script>
 @endpush

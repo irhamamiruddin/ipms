@@ -625,4 +625,22 @@ class LandController extends Controller
     public function export() {
         return Excel::download(new LandFromView, 'lands.xlsx');
     }
+
+    public function update_exp_noty($id) {
+        $land = Land::findOrFail($id);
+
+        $land->expiry_date_noty = request('expiry_date_noty');
+        $land->save();
+
+        return redirect()->route('lands.index');
+    }
+
+    public function update_annual_noty($id) {
+        $land = Land::findOrFail($id);
+
+        $land->annual_rent_next_paid_date_noty = request('annual_noty');
+        $land->save();
+
+        return redirect()->route('lands.index');
+    }
 }

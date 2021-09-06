@@ -23,6 +23,7 @@
                         <table id="order-listing" class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th>Notification</th>
                                     <th>Project</th>
                                     <th>Land Description</th>
                                     <th>Area</th>
@@ -34,6 +35,10 @@
                             <tbody>
                             @foreach($lands as $land)
                                 <tr>
+                                    <td>
+                                        <input type="checkbox" id="expiry_date_noty{{$land->id}}" name="expiry_date_noty" value="1" @if($land->expiry_date_noty == 1) checked @endif> Expiry <br><br>
+                                        <input type="checkbox" id="annual_noty{{$land->id}}" name="annual_noty" value="1" @if($land->annual_rent_next_paid_date_noty == 1) checked @endif> Annual Rent
+                                    </td>
                                     <td>@if($land->project_id == NULL) None @else {{$land->project->title}} @endif</td>
                                     <td>{{$land->land_description}}</td>
                                     <td>{{$land->locality}}</td>
@@ -65,4 +70,60 @@
 <script src="../../../../vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="../../../../vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="{{ asset('js/data-table.js') }}"></script>
+
+<script>
+@foreach($lands as $land)
+    $(document).ready(function(){
+        $("#expiry_date_noty{{$land->id}}").click(function(){
+            if ($("#expiry_date_noty{{$land->id}}").is(":checked")) {
+                    var expiry_date_noty = 1;
+            } else {
+                var expiry_date_noty = 0;
+            }
+
+            $.ajax({
+                url: "{{ route('lands.update_exp_noty',[$land->id]) }}",
+                method: 'PUT',
+                data:{
+                    expiry_date_noty:expiry_date_noty,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(data){
+                    console.log(data);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            });
+        });
+    });
+@endforeach
+
+@foreach($lands as $land)
+    $(document).ready(function(){
+        $("#annual_noty{{$land->id}}").click(function(){
+            if ($("#annual_noty{{$land->id}}").is(":checked")) {
+                    var annual_noty = 1;
+            } else {
+                var annual_noty = 0;
+            }
+
+            $.ajax({
+                url: "{{ route('lands.update_annual_noty',[$land->id]) }}",
+                method: 'PUT',
+                data:{
+                    annual_noty:annual_noty,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(data){
+                    console.log(data);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            });
+        });
+    });
+@endforeach
+</script>
 @endpush

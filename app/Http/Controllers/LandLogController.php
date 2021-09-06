@@ -160,12 +160,19 @@ class LandLogController extends Controller
         return redirect()->route('lands.logs.index', $land_id);
     }
 
-    public function check_report(){
-        $land_id = request('land_id');
-        $log_id = request('log_id');
+    public function update_report($land_id, $log_id){
         $log = LandLog::findOrFail($log_id);
 
         $log->report = request('report');
+        $log->save();
+
+        return redirect()->route('lands.logs.index', $land_id);
+    }
+
+    public function update_noty($land_id, $log_id) {
+        $log = LandLog::findOrFail($log_id);
+
+        $log->reminder_date_noty = request('reminder_date_noty');
         $log->save();
 
         return redirect()->route('lands.logs.index', $land_id);
