@@ -26,6 +26,7 @@ Auth::routes();
 
 //Dashboard
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::post('/mark-as-read', [DashboardController::class, 'mark_as_read'])->name('mark_as_read');
 
 //Contacts
 Route::get('/contacts/export/', [ContactController::class, 'export'])->name('contacts.export');
