@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\ActivityLog;
 use Auth;
 use Bouncer;
+use Illuminate\Support\Str;
 
 class SettingUserController extends Controller
 {
@@ -16,7 +17,11 @@ class SettingUserController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('can:setting-user');
+        $this->middleware('can:user-index', ['only' => ['index']]);
+        $this->middleware('can:user-create', ['only' => ['create']]);
+        $this->middleware('can:user-edit', ['only' => ['edit']]);
+        $this->middleware('can:user-update', ['only' => ['update']]);
+        $this->middleware('can:user-delete', ['only' => ['delete']]);
     }
 
     public function index()
@@ -24,6 +29,17 @@ class SettingUserController extends Controller
         $users = User::all();
 
         return view('settings.users.index',['users'=>$users]);
+    }
+
+    public function profile($id)
+    {
+        if (Auth::id() != $id) {
+            abort(403,"Can not access");
+        }
+        
+        $user = User::findOrFail($id);
+        
+        return view('profile')->with('user',$user);
     }
 
     public function create()
@@ -89,8 +105,16 @@ class SettingUserController extends Controller
         if(request('password') != NULL) {
             $user->password = Hash::make(request('password'));
         }
-        $user->status = request('status');
-        $role = request('role');
+        if(request('status') !== NULL) {
+            $user->status = request('status');
+        }
+        if(request('role') !== NULL) {
+            $role = request('role');
+        }
+        if (request('image') != NULL) {
+            $string = Str::random(16);
+            $user->image = request('image')->storeAs('image',$string.'.jpg');
+        }
 
         if ($user->save()) {
             $log = New ActivityLog();
@@ -103,9 +127,13 @@ class SettingUserController extends Controller
             $log->save();
         }
 
-        Bouncer::sync($user)->roles($role);
+        if (request('status') !== NULL && request('role') !== NULL) {
+            Bouncer::sync($user)->roles($role);
 
-        return redirect('/settings/users');
+            return redirect('/settings/users');
+        } else {
+            return redirect('/profile/'.$id);
+        }
     }
 
     public function destroy($id)

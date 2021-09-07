@@ -11,6 +11,7 @@ use App\Http\Controllers\ProjectConsultantController;
 use App\Http\Controllers\ProjectLogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\SettingUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,9 @@ Auth::routes();
 //Dashboard
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::post('/mark-as-read', [DashboardController::class, 'mark_as_read'])->name('mark_as_read');
+
+//Profile
+Route::get('/profile/{id}', [SettingUserController::class, 'profile'])->name('profile');
 
 //Contacts
 Route::get('/contacts/export/', [ContactController::class, 'export'])->name('contacts.export');

@@ -4,7 +4,13 @@
     <li class="nav-item nav-profile">
         <div class="nav-link">
         <div class="profile-image">
-            <img src="https://via.placeholder.com/100x100" alt="image"/>
+            <a href="{{ route('profile', auth()->user()->id) }}"><img 
+            @if(isset(auth()->user()->image))
+            src="{{  asset('storage/' . auth()->user()->image) }}" 
+            @else
+            src="https://via.placeholder.com/100x100"
+            @endif
+            alt="image"/></a>
             <span class="online-status online"></span> <!--change class online to offline or busy as needed-->
         </div>
         <div class="profile-name">

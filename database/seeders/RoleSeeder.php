@@ -25,6 +25,7 @@ class RoleSeeder extends Seeder
         // Bouncer::allow('superadmin')->to('setting-user');
         Bouncer::allow('superadmin')->everything();
 
+        Bouncer::allow('manager')->to('user-update');
         Bouncer::allow('manager')->to('contact-index');
         Bouncer::allow('manager')->to('contact-create');
         Bouncer::allow('manager')->to('contact-edit');
@@ -53,6 +54,7 @@ class RoleSeeder extends Seeder
         Bouncer::allow('manager')->to('assign-oic');
         Bouncer::allow('manager')->to('add-beneficiary');
 
+        Bouncer::allow('project_officer')->to('user-update');
         Bouncer::allow('project_officer')->to('contact-index');
         Bouncer::allow('project_officer')->to('contact-create');
         Bouncer::allow('project_officer')->to('contact-edit');
@@ -77,6 +79,7 @@ class RoleSeeder extends Seeder
         Bouncer::allow('project_officer')->to('setting-log');
         Bouncer::allow('project_officer')->to('setting-other');
 
+        Bouncer::allow('land_officer')->to('user-update');
         Bouncer::allow('land_officer')->to('contact-index');
         Bouncer::allow('land_officer')->to('contact-create');
         Bouncer::allow('land_officer')->to('contact-edit');
@@ -96,8 +99,10 @@ class RoleSeeder extends Seeder
         Bouncer::allow('land_officer')->to('setting-log');
         Bouncer::allow('land_officer')->to('setting-other');
 
+        Bouncer::allow('consultant_partner')->to('user-update');
         Bouncer::allow('consultant_partner')->to('project-index');
 
+        Bouncer::allow('beneficiary_partner')->to('user-update');
         Bouncer::allow('beneficiary_partner')->to('land-index');
         Bouncer::allow('beneficiary_partner')->to('project-index');
     }

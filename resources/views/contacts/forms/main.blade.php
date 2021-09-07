@@ -42,6 +42,9 @@
     <div class="form-group col-md-6">
     {{ Form::label('image', 'Image Upload') }}
     {{ Form::input('file', 'image', null, ['class' => 'form-control', 'accept' => 'image/*']) }}
+    @if($contact->image != NULL)
+    <img class="img-fluid" src="{{  asset('storage/' . $contact->image) }}" alt="Uploaded Image">
+    @endif
     </div>
 </div>
 <div class="form-group">
