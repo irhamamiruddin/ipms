@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\ActivityLog;
@@ -53,27 +55,29 @@ class SettingUserController extends Controller
         return view('settings.users.create', $data);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $user = New User();
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
 
-        $user->name = request('name');
-        $user->email = request('email');
-        $user->password = Hash::make(request('password'));
-        $user->status = request('status');
-        $role = request('role');
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'status' => $request->input('status')
+        ]);
 
-        if ($user->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "User";
-            $log->action = "Add";
-
-            $log->save();
-        }
-
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('name'),
+            'class' => 'User',
+            'action' => 'Add',
+        ]);
+        
+        $role = $request->input('role');
         Bouncer::assign($role)->to($user);
 
         return redirect('/settings/users');
@@ -96,43 +100,66 @@ class SettingUserController extends Controller
         return view('settings.users.edit', $data);
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        $user->name = request('name');
-        $user->email = request('email');
-        if(request('password') != NULL) {
-            $user->password = Hash::make(request('password'));
-        }
-        if(request('status') !== NULL) {
-            $user->status = request('status');
-        }
-        if(request('role') !== NULL) {
-            $role = request('role');
-        }
-        if (request('image') != NULL) {
-            $string = Str::random(16);
-            $user->image = request('image')->storeAs('image',$string.'.jpg');
+        if ($request->has('name')) {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id]
+            ]);
+
+            $user->fill([
+                'name' => $request->input('name'),
+                'email' => $request->input('email')
+            ]);
+
+            //If request from edit, else from profile
+            if ($request->has('role')) {
+                $user->status = $request->input('status');
+                $user->save();
+
+                $role = $request->input('role');
+                Bouncer::sync($user)->roles($role);
+            } else {
+                if ($request->has('image')) {
+                    $user->image = $request->image->store('images');
+                }
+                $user->save();
+            }
+
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $request->input('name'),
+                'class' => 'User',
+                'action' => 'Update',
+            ]);
+
+            return back()->with('success', 'Updated Succesfully!');
         }
 
-        if ($user->save()) {
-            $log = New ActivityLog();
+        if ($request->has('password')) {
+            $request->validate([
+                'current_password' => ['required'],
+                'password' => ['required', 'string', 'min:8', 'confirmed']
+            ]);
 
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "User";
-            $log->action = "Update";
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors('Current password does not match!');
+            }
 
-            $log->save();
-        }
+            $user->password = Hash::make($request->password);
+            $user->save();
 
-        if (request('status') !== NULL && request('role') !== NULL) {
-            Bouncer::sync($user)->roles($role);
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $user->name,
+                'class' => 'User',
+                'action' => 'Changed Password',
+            ]);
 
-            return redirect('/settings/users');
-        } else {
-            return redirect('/profile/'.$id);
+            return back()->with('success', 'Password Changed Succesfully!');
         }
     }
 
@@ -164,5 +191,10 @@ class SettingUserController extends Controller
 
         
         return redirect('/settings/users');
+    }
+
+    public function change_password($id) 
+    {
+        return view('settings.users.change_password')->with('id',$id);
     }
 }

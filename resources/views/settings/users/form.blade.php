@@ -22,16 +22,26 @@
     </select>
     </div>
 </div>
+
+@if (!isset($user))
 <div class="form-row">
     <div class="form-group col">
     {{ Form::label('password', 'Password') }}
     {{ Form::password('password', ['class' => 'form-control']) }}
     </div>
     <div class="form-group col">
-    {{ Form::label('c_password', 'Confirm Password') }}
-    {{ Form::password('c_password', ['class' => 'form-control']) }}
+    {{ Form::label('password_confirmation', 'Confirm Password') }}
+    {{ Form::password('password_confirmation', ['class' => 'form-control']) }}
     </div>
 </div>
+@else
+<div class="form-row">
+    <div class="form-group col-3">
+        <a href="{{ route('users.change_password',$user->id) }}" class="btn btn-danger form-control">Change Password</a>
+    </div>
+</div>
+@endif
+
 <div class="">
     <div class="form-group">
     {{ Form::label('status', 'Status') }}

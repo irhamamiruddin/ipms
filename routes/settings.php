@@ -157,6 +157,7 @@ Route::prefix('settings')->group(function() {
     });
 
     //Users
+    Route::get('users/{id}/change-password', [SettingUserController::class, 'change_password'])->name('users.change_password');
     Route::resource('users', SettingUserController::class)->except([
         'show'
     ]);

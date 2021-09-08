@@ -20,10 +20,10 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->text('image')->nullable();
+            $table->string('status', 255)->nullable();
             // $table->string('access_rights', 255)->nullable();
             // $table->string('role', 255)->nullable();
             // $table->integer('role_id')->nullable();
-            // $table->string('status', 255)->nullable();
             // $table->string('superadmin_permission', 255)->nullable();
             // $table->string('bp_permission', 255)->nullable();
             // $table->string('cp_permission', 255)->nullable();

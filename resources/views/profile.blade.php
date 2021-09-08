@@ -17,6 +17,16 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
+                @if (Session::has('success'))
+                    <div class="alert alert-success"> {{Session::get('success')}} </div>
+                @endif
+                @if($errors->any())
+                    <div class="alert alert-danger"> 
+                        @foreach ($errors->all() as $message)
+                            {{$message}} <br>
+                        @endforeach
+                    </div>
+                @endif
                 <div class="form-row">
                     <div class="form-group col">
                     {{ Form::label('name', 'Name') }}
@@ -33,17 +43,12 @@
                     @if($user->image != NULL)
                     <img width="100" height="100" class="img-fluid" src="{{  asset('storage/' . $user->image) }}" alt="Uploaded Image">
                     @endif
-                    {{ Form::input('file', 'image', null, ['class' => 'form-control']) }}
+                    {{ Form::input('file', 'image', null, ['class' => 'form-control border-0']) }}
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col">
-                    {{ Form::label('password', 'New Password') }}
-                    {{ Form::password('password', ['class' => 'form-control']) }}
-                    </div>
-                    <div class="form-group col">
-                    {{ Form::label('password_confirmation', 'Confirm Password') }}
-                    {{ Form::password('password_confirmation', ['class' => 'form-control']) }}
+                    <div class="form-group col-3">
+                        <a href="{{ route('users.change_password',$user->id) }}" class="btn btn-danger form-control">Change Password</a>
                     </div>
                 </div>
             </div>
