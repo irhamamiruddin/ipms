@@ -11,7 +11,6 @@ use App\Models\Role;
 use App\Models\ActivityLog;
 use Auth;
 use Bouncer;
-use Illuminate\Support\Str;
 
 class SettingUserController extends Controller
 {
@@ -59,7 +58,7 @@ class SettingUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'unique:contacts', 'unique:companies'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
@@ -107,7 +106,7 @@ class SettingUserController extends Controller
         if ($request->has('name')) {
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id]
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:contacts', 'unique:companies', 'unique:users,email,'.$user->id]
             ]);
 
             $user->fill([
@@ -175,21 +174,18 @@ class SettingUserController extends Controller
             $user->contacts()->exists() ||
             $user->activity_logs()->exists()
         ) {
-            return redirect()->back()->with('alert', 'Delete failed! Data currently in use!');
+            return back()->with('alert', 'Deletion failed! Data currently in use!');
         }
 
         if ($user->delete()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = $user->name;
-            $log->class = "User";
-            $log->action = "Delete";
-
-            $log->save();
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $user->name,
+                'class' => 'User',
+                'action' => 'Delete',
+            ]);
         }
 
-        
         return redirect('/settings/users');
     }
 

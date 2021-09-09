@@ -44,49 +44,31 @@ class CompanyController extends Controller
         return view('companies.create', $data);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $companies = New Company();
+        $request->validate([
+            'email' => ['email', 'max:255', 'unique:users', 'unique:contacts', 'unique:companies']
+        ]);
 
-        $companies->business_nature_id = request('business_nature');
-        $companies->company_name = request('company_name');
-        $companies->company_no = request('company_no');
-        $companies->principle_name = request('principle_name');
-        $companies->registered_person_no = request('registered_person_no');
-        $companies->address = request('address');
-        $companies->phone = request('phone');
-        $companies->email = request('email');
-        $companies->banker = request('banker');
-        $companies->bank_ac_no = request('bank_ac_no');
-        $companies->home_phone = request('home_phone');
-        $companies->office_phone = request('office_phone');
-        $companies->fax_phone = request('fax_phone');
-        $companies->website_url = request('website_url');
-        $companies->remark = request('remark');
+        $company = Company::create($request->all());
 
-        if ($companies->save()) {
-            $log = New ActivityLog();
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('company_name'),
+            'class' => 'Company',
+            'action' => 'Add',
+        ]);
 
-            $log->user_id = Auth::id();
-            $log->name = request('company_name');
-            $log->class = "Company";
-            $log->action = "Add";
-
-            $log->save();
-        }
-
-        if (request('contact_id') != NULL) {
-            $company = Company::find($companies->id);
-
-            $contact_id = request('contact_id');
-            $submitted_role = request('submitted_role');
+        if ($request->has('contact_id')) {
+            $contact_id = $request->input('contact_id');
+            $submitted_role = $request->input('submitted_role');
 
             for($j = 0; $j < count($contact_id); $j++) {
                 $company->contacts()->attach($contact_id[$j], ['role' => $submitted_role[$j]]);
             }
         }
         
-        return redirect('/companies');
+        return redirect('/companies')->with('success','Created Successfully!');
     }
 
     public function show($id)
@@ -112,50 +94,32 @@ class CompanyController extends Controller
         return view('companies.edit', $data);
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'email' => ['email', 'max:255', 'unique:users', 'unique:contacts', 'unique:companies,email,'.$id]
+        ]);
+
         $company = Company::findOrFail($id);
+        $company->update($request->all());
 
-        $company->business_nature_id = request('business_nature');
-        $company->company_name = request('company_name');
-        $company->company_no = request('company_no');
-        $company->principle_name = request('principle_name');
-        $company->registered_person_no = request('registered_person_no');
-        $company->address = request('address');
-        $company->phone = request('phone');
-        $company->email = request('email');
-        $company->banker = request('banker');
-        $company->bank_ac_no = request('bank_ac_no');
-        $company->home_phone = request('home_phone');
-        $company->office_phone = request('office_phone');
-        $company->fax_phone = request('fax_phone');
-        $company->website_url = request('website_url');
-        $company->remark = request('remark');
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('company_name'),
+            'class' => 'Company',
+            'action' => 'Update',
+        ]);
 
-        if ($company->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('company_name');
-            $log->class = "Company";
-            $log->action = "Update";
-
-            $log->save();
-        }
-        
-
-        if (request('contact_id') != NULL) {
-            // $company->contacts()->where('id', $id)->detach();
-
-            $contact_id = request('contact_id');
-            $submitted_role = request('submitted_role');
+        if ($request->has('contact_id')) {
+            $contact_id = $request->input('contact_id');
+            $submitted_role = $request->input('submitted_role');
 
             for($j = 0; $j < count($contact_id); $j++) {
                 $company->contacts()->attach($contact_id[$j], ['role' => $submitted_role[$j]]);
             }
         }
 
-        return redirect('/companies');
+        return redirect('/companies')->with('success','Updated Successfully!');
     }
     
     public function destroy($id){
@@ -163,17 +127,17 @@ class CompanyController extends Controller
         $company = Company::findOrFail($id);
 
         if ($company->delete()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = $company->company_name;
-            $log->class = "Company";
-            $log->action = "Delete";
-
-            $log->save();
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $company->company_name,
+                'class' => 'Company',
+                'action' => 'Delete',
+            ]);
+        } else {
+            return back()->withErrors('Deletion Failed!');
         }
         
-        return redirect('/companies');
+        return redirect('/companies')->with('success','Deleted!');
     }
 
     public function export() {

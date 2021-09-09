@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LandFromView;
@@ -55,10 +54,7 @@ class LandController extends Controller
         $classifications = LandClassification::pluck('classification','id');
         $land_acquisition_status = LandAcquisitionStatus::pluck('status','id');
         $categories_of_land = CategoriesOfLand::pluck('category','id');
-        $officers = User::where('role', 'land_staff')
-                        ->orWhere('role', 'project_staff')
-                        ->orWhere('role', 'manager')
-                        ->get();
+        $officers = User::whereIs('manager', 'land_officer', 'project_officer')->get();
         $contacts = Contact::all();
         $companies = Company::all();
         $agreements = RegisteredProprietorNature::all();
@@ -92,54 +88,22 @@ class LandController extends Controller
         return view('lands.create', $data);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $lands = New Land();
-
-        $lands->land_description = request('land_description');
-        $lands->field_lot = request('field_lot');
-        $lands->lot = request('lot');
-        $lands->block = request('block');
-        $lands->district = request('district');
-        $lands->locality = request('locality');
-        $lands->gps_land_size = request('gps_land_size');
-        $lands->gps_land_size_unit = request('gps_land_size_unit');
-        $lands->size = request('size');
-        $lands->size_unit = request('size_unit');
-        $lands->classification = request('classification');
-        $lands->term = request('term');
-        $lands->commencement_date = request('commencement_date');
-        $lands->expiry_date = request('expiry_date');
-        $lands->date_of_registration = request('date_of_registration');
-        $lands->annual_rent = request('annual_rent');
-        $lands->land_acquisition_status_id = request('land_acquisition_status_id');
-        $lands->division = request('division');
-        $lands->categories_of_land_id = request('categories_of_land_id');
-        $lands->special_condition = request('special_condition');
-        $lands->annual_rent_last_paid_date = request('annual_rent_last_paid_date');
-        $lands->annual_rent_next_paid_date = request('annual_rent_next_paid_date');
-        $lands->remark = request('remark');
-
-        if ($lands->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('land_description');
-            $log->class = "Land";
-            $log->action = "Add";
-
-            $log->save();
-        }
-
-        $land = Land::find($lands->id);
+        $land = Land::create($request->all());
         
-        if (request('file') != NULL) {
-            $string = Str::random(16);
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('land_description'),
+            'class' => 'Land',
+            'action' => 'Add',
+        ]);
 
-            $filename = request('file')->getClientOriginalName();
-            $extension = request('file')->getClientOriginalExtension();
-            $filepath = request('file')->storeAs('file', $string . '.' .$extension);
-            
+        if ($request->has('file')) {
+            $filename = $request->file->getClientOriginalName();
+            $extension = $request->file->getClientOriginalExtension();
+            $filepath = $request->file->store('files');
+
             $file = new File([
                 'filename' => $filename,
                 'extension' => $extension,
@@ -149,61 +113,59 @@ class LandController extends Controller
             $land->files()->save($file);
         }
 
-        if (request('oic_id') != NULL) {
-            $oic_id = request('oic_id');
+        if ($request->has('oic_id')) {
+            $oic_id = $request->input('oic_id');
 
             for($i = 0; $i < count($oic_id); $i++) {
                 $land->officer_in_charge()->attach($oic_id[$i]);
             }
         }
         
-        if (request('roic_id') != NULL) {
-            $roic_id = request('roic_id');
+        if ($request->has('roic_id')) {
+            $roic_id = $request->input('roic_id');
 
             for($i = 0; $i < count($roic_id); $i++) {
                 $land->relief_officer_in_charge()->attach($roic_id[$i]);
             }
         }
 
-        if (request('kk_id') != NULL) {
-            $kk_id = request('kk_id');
-            $kk_remark = request('kk_remark');
+        if ($request->has('kk_id')) {
+            $kk_id = $request->input('kk_id');
+            $kk_remark = $request->input('kk_remark');
 
             for($i = 0; $i < count($kk_id); $i++) {
                 $land->ketua_kampung()->attach($kk_id[$i], ['remark' => $kk_remark[$i]]);
             }
         }
 
-        if (request('rp_id') != NULL) {
-            $rp_id = request('rp_id');
-            $rp_type = request('rp_type');
-            $rp_share = request('rp_share');
-            $rp_totalshare = request('rp_totalshare');
-            $rp_remark = request('rp_remark');
+        if ($request->has('rp_id')) {
+            $rp_id = $request->input('rp_id');
+            $rp_type = $request->input('rp_type');
+            $rp_share = $request->input('rp_share');
+            $rp_totalshare = $request->input('rp_totalshare');
+            $rp_remark = $request->input('rp_remark');
 
             for($i = 0; $i < count($rp_id); $i++) {
-                $registered_proprietor = new RegisteredProprietor;
-
-                $registered_proprietor->land_id = $lands->id;
-                $registered_proprietor->type = $rp_type[$i];
-                $registered_proprietor->item_id = $rp_id[$i];
-                $registered_proprietor->share = $rp_share[$i];
-                $registered_proprietor->total_share = $rp_totalshare[$i];
-                $registered_proprietor->remarks = $rp_remark[$i];
-
-                $registered_proprietor->save();
+                RegisteredProprietor::create([
+                    'land_id' => $land->id,
+                    'type' => $rp_type[$i],
+                    'item_id' => $rp_id[$i],
+                    'share' => $rp_share[$i],
+                    'total_share' => $rp_totalshare[$i],
+                    'remarks' => $rp_remark[$i],
+                ]);
             }
         }
 
-        if (request('agreement_id') != NULL) {
-            $agreement_id = request('agreement_id');
-            $signing_date = request('signing_date');
-            $stamping_date = request('stamping_date');
-            $expiry_date_agreement = request('expiry_date_agreement');
-            $reminder_period = request('reminder_period');
-            $reminder_date = request('reminder_date');
-            $s_p_price = request('s_p_price');
-            $consideration = request('consideration');
+        if ($request->has('agreement_id')) {
+            $agreement_id = $request->input('agreement_id');
+            $signing_date = $request->input('signing_date');
+            $stamping_date = $request->input('stamping_date');
+            $expiry_date_agreement = $request->input('expiry_date_agreement');
+            $reminder_period = $request->input('reminder_period');
+            $reminder_date = $request->input('reminder_date');
+            $s_p_price = $request->input('s_p_price');
+            $consideration = $request->input('consideration');
 
             for($i = 0; $i < count($agreement_id); $i++) {
                 $land->agreement()->attach($agreement_id[$i], [
@@ -218,33 +180,31 @@ class LandController extends Controller
             }
         }
 
-        if (request('nominee_id') != NULL) {
-            $nominee_id = request('nominee_id');
-            $nominee_type = request('nominee_type');
-            $nominee_share = request('nominee_share');
-            $nominee_totalshare = request('nominee_totalshare');
-            $nominee_remark = request('nominee_remark');
+        if ($request->has('nominee_id')) {
+            $nominee_id = $request->input('nominee_id');
+            $nominee_type = $request->input('nominee_type');
+            $nominee_share = $request->input('nominee_share');
+            $nominee_totalshare = $request->input('nominee_totalshare');
+            $nominee_remark = $request->input('nominee_remark');
 
             for($i = 0; $i < count($nominee_id); $i++) {
-                $nominee = new Nominee;
-
-                $nominee->land_id = $lands->id;
-                $nominee->type = $nominee_type[$i];
-                $nominee->item_id = $nominee_id[$i];
-                $nominee->share = $nominee_share[$i];
-                $nominee->total_share = $nominee_totalshare[$i];
-                $nominee->remarks = $nominee_remark[$i];
-
-                $nominee->save();
+                Nominee::create([
+                    'land_id' => $land->id,
+                    'type' => $nominee_type[$i],
+                    'item_id' => $nominee_id[$i],
+                    'share' => $nominee_share[$i],
+                    'total_share' => $nominee_totalshare[$i],
+                    'remarks' => $nominee_remark[$i],
+                ]);
             }
         }
 
-        if (request('consent_id') != NULL) {
-            $consent_id = request('consent_id');
-            $signing_date_consent = request('signing_date_consent');
-            $stamping_date_consent = request('stamping_date_consent');
-            $instrument_no = request('instrument_no');
-            $instrument_registered_date = request('instrument_registered_date');
+        if ($request->has('consent_id')) {
+            $consent_id = $request->input('consent_id');
+            $signing_date_consent = $request->input('signing_date_consent');
+            $stamping_date_consent = $request->input('stamping_date_consent');
+            $instrument_no = $request->input('instrument_no');
+            $instrument_registered_date = $request->input('instrument_registered_date');
 
             for($i = 0; $i < count($consent_id); $i++) {
                 $land->consent()->attach($consent_id[$i], [
@@ -256,49 +216,45 @@ class LandController extends Controller
             }
         }
 
-        if (request('trustee_id') != NULL) {
-            $trustee_id = request('trustee_id');
-            $trustee_type = request('trustee_type');
-            $trustee_share = request('trustee_share');
-            $trustee_totalshare = request('trustee_totalshare');
-            $trustee_remark = request('trustee_remark');
+        if ($request->has('trustee_id')) {
+            $trustee_id = $request->input('trustee_id');
+            $trustee_type = $request->input('trustee_type');
+            $trustee_share = $request->input('trustee_share');
+            $trustee_totalshare = $request->input('trustee_totalshare');
+            $trustee_remark = $request->input('trustee_remark');
 
             for($i = 0; $i < count($trustee_id); $i++) {
-                $trustee = new Trustee;
-
-                $trustee->land_id = $lands->id;
-                $trustee->type = $trustee_type[$i];
-                $trustee->item_id = $trustee_id[$i];
-                $trustee->share = $trustee_share[$i];
-                $trustee->total_share = $trustee_totalshare[$i];
-                $trustee->remarks = $trustee_remark[$i];
-
-                $trustee->save();
+                Trustee::create([
+                    'land_id' => $land->id,
+                    'type' => $trustee_type[$i],
+                    'item_id' => $trustee_id[$i],
+                    'share' => $trustee_share[$i],
+                    'total_share' => $trustee_totalshare[$i],
+                    'remarks' => $trustee_remark[$i],
+                ]);
             }
         }
 
-        if (request('beneficiary_id') != NULL) {
-            $beneficiary_id = request('beneficiary_id');
-            $beneficiary_type = request('beneficiary_type');
-            $beneficiary_share = request('beneficiary_share');
-            $beneficiary_totalshare = request('beneficiary_totalshare');
-            $beneficiary_remark = request('beneficiary_remark');
+        if ($request->has('beneficiary_id')) {
+            $beneficiary_id = $request->input('beneficiary_id');
+            $beneficiary_type = $request->input('beneficiary_type');
+            $beneficiary_share = $request->input('beneficiary_share');
+            $beneficiary_totalshare = $request->input('beneficiary_totalshare');
+            $beneficiary_remark = $request->input('beneficiary_remark');
 
             for($i = 0; $i < count($beneficiary_id); $i++) {
-                $beneficiary = new Beneficiary;
-
-                $beneficiary->land_id = $lands->id;
-                $beneficiary->type = $beneficiary_type[$i];
-                $beneficiary->item_id = $beneficiary_id[$i];
-                $beneficiary->share = $beneficiary_share[$i];
-                $beneficiary->total_share = $beneficiary_totalshare[$i];
-                $beneficiary->remarks = $beneficiary_remark[$i];
-
-                $beneficiary->save();
+                Beneficiary::create([
+                    'land_id' => $land->id,
+                    'type' => $beneficiary_type[$i],
+                    'item_id' => $beneficiary_id[$i],
+                    'share' => $beneficiary_share[$i],
+                    'total_share' => $beneficiary_totalshare[$i],
+                    'remarks' => $beneficiary_remark[$i],
+                ]);
             }
         }
         
-        return redirect('/lands');
+        return redirect('/lands')->with('success','Created Successfully!');
     }
 
     public function show($id)
@@ -308,10 +264,7 @@ class LandController extends Controller
         $classifications = LandClassification::pluck('classification','id');
         $land_acquisition_status = LandAcquisitionStatus::pluck('status','id');
         $categories_of_land = CategoriesOfLand::pluck('category','id');
-        $officers = User::where('role', 'land_staff')
-                        ->orWhere('role', 'project_staff')
-                        ->orWhere('role', 'manager')
-                        ->get();
+        $officers = User::whereIs('manager', 'land_officer', 'project_officer')->get();
         $contacts = Contact::all();
         $companies = Company::all();
         $agreements = RegisteredProprietorNature::all();
@@ -353,10 +306,7 @@ class LandController extends Controller
         $classifications = LandClassification::pluck('classification','id');
         $land_acquisition_status = LandAcquisitionStatus::pluck('status','id');
         $categories_of_land = CategoriesOfLand::pluck('category','id');
-        $officers = User::where('role', 'land_staff')
-                        ->orWhere('role', 'project_staff')
-                        ->orWhere('role', 'manager')
-                        ->get();
+        $officers = User::whereIs('manager', 'land_officer', 'project_officer')->get();
         $contacts = Contact::all();
         $companies = Company::all();
         $agreements = RegisteredProprietorNature::all();
@@ -391,52 +341,24 @@ class LandController extends Controller
         return view('lands.edit', $data);
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
         $land = Land::findOrFail($id);
 
-        $land->land_description = request('land_description');
-        $land->field_lot = request('field_lot');
-        $land->lot = request('lot');
-        $land->block = request('block');
-        $land->district = request('district');
-        $land->locality = request('locality');
-        $land->gps_land_size = request('gps_land_size');
-        $land->gps_land_size_unit = request('gps_land_size_unit');
-        $land->size = request('size');
-        $land->size_unit = request('size_unit');
-        $land->classification = request('classification');
-        $land->term = request('term');
-        $land->commencement_date = request('commencement_date');
-        $land->expiry_date = request('expiry_date');
-        $land->date_of_registration = request('date_of_registration');
-        $land->annual_rent = request('annual_rent');
-        $land->land_acquisition_status_id = request('land_acquisition_status_id');
-        $land->division = request('division');
-        $land->categories_of_land_id = request('categories_of_land_id');
-        $land->special_condition = request('special_condition');
-        $land->annual_rent_last_paid_date = request('annual_rent_last_paid_date');
-        $land->annual_rent_next_paid_date = request('annual_rent_next_paid_date');
-        $land->remark = request('remark');
+        $land->update($request->all());
+        
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('land_description'),
+            'class' => 'Land',
+            'action' => 'Add',
+        ]);
 
-        if ($land->save()) {
-            $log = New ActivityLog();
+        if ($request->has('file')) {
+            $filename = $request->file->getClientOriginalName();
+            $extension = $request->file->getClientOriginalExtension();
+            $filepath = $request->file->store('files');
 
-            $log->user_id = Auth::id();
-            $log->name = request('land_description');
-            $log->class = "Land";
-            $log->action = "Update";
-
-            $log->save();
-        }
-
-        if (request('file') != NULL) {
-            $string = Str::random(16);
-
-            $filename = request('file')->getClientOriginalName();
-            $extension = request('file')->getClientOriginalExtension();
-            $filepath = request('file')->storeAs('file', $string . '.' .$extension);
-            
             $file = new File([
                 'filename' => $filename,
                 'extension' => $extension,
@@ -446,61 +368,59 @@ class LandController extends Controller
             $land->files()->save($file);
         }
 
-        if (request('oic_id') != NULL) {
-            $oic_id = request('oic_id');
+        if ($request->has('oic_id')) {
+            $oic_id = $request->input('oic_id');
 
             for($i = 0; $i < count($oic_id); $i++) {
                 $land->officer_in_charge()->attach($oic_id[$i]);
             }
         }
         
-        if (request('roic_id') != NULL) {
-            $roic_id = request('roic_id');
+        if ($request->has('roic_id')) {
+            $roic_id = $request->input('roic_id');
 
             for($i = 0; $i < count($roic_id); $i++) {
                 $land->relief_officer_in_charge()->attach($roic_id[$i]);
             }
         }
 
-        if (request('kk_id') != NULL) {
-            $kk_id = request('kk_id');
-            $kk_remark = request('kk_remark');
+        if ($request->has('kk_id')) {
+            $kk_id = $request->input('kk_id');
+            $kk_remark = $request->input('kk_remark');
 
             for($i = 0; $i < count($kk_id); $i++) {
                 $land->ketua_kampung()->attach($kk_id[$i], ['remark' => $kk_remark[$i]]);
             }
         }
 
-        if (request('rp_id') != NULL) {
-            $rp_id = request('rp_id');
-            $rp_type = request('rp_type');
-            $rp_share = request('rp_share');
-            $rp_totalshare = request('rp_totalshare');
-            $rp_remark = request('rp_remark');
+        if ($request->has('rp_id')) {
+            $rp_id = $request->input('rp_id');
+            $rp_type = $request->input('rp_type');
+            $rp_share = $request->input('rp_share');
+            $rp_totalshare = $request->input('rp_totalshare');
+            $rp_remark = $request->input('rp_remark');
 
             for($i = 0; $i < count($rp_id); $i++) {
-                $registered_proprietor = new RegisteredProprietor;
-
-                $registered_proprietor->land_id = $id;
-                $registered_proprietor->type = $rp_type[$i];
-                $registered_proprietor->item_id = $rp_id[$i];
-                $registered_proprietor->share = $rp_share[$i];
-                $registered_proprietor->total_share = $rp_totalshare[$i];
-                $registered_proprietor->remarks = $rp_remark[$i];
-
-                $registered_proprietor->save();
+                RegisteredProprietor::create([
+                    'land_id' => $land->id,
+                    'type' => $rp_type[$i],
+                    'item_id' => $rp_id[$i],
+                    'share' => $rp_share[$i],
+                    'total_share' => $rp_totalshare[$i],
+                    'remarks' => $rp_remark[$i],
+                ]);
             }
         }
 
-        if (request('agreement_id') != NULL) {
-            $agreement_id = request('agreement_id');
-            $signing_date = request('signing_date');
-            $stamping_date = request('stamping_date');
-            $expiry_date_agreement = request('expiry_date_agreement');
-            $reminder_period = request('reminder_period');
-            $reminder_date = request('reminder_date');
-            $s_p_price = request('s_p_price');
-            $consideration = request('consideration');
+        if ($request->has('agreement_id')) {
+            $agreement_id = $request->input('agreement_id');
+            $signing_date = $request->input('signing_date');
+            $stamping_date = $request->input('stamping_date');
+            $expiry_date_agreement = $request->input('expiry_date_agreement');
+            $reminder_period = $request->input('reminder_period');
+            $reminder_date = $request->input('reminder_date');
+            $s_p_price = $request->input('s_p_price');
+            $consideration = $request->input('consideration');
 
             for($i = 0; $i < count($agreement_id); $i++) {
                 $land->agreement()->attach($agreement_id[$i], [
@@ -515,33 +435,31 @@ class LandController extends Controller
             }
         }
 
-        if (request('nominee_id') != NULL) {
-            $nominee_id = request('nominee_id');
-            $nominee_type = request('nominee_type');
-            $nominee_share = request('nominee_share');
-            $nominee_totalshare = request('nominee_totalshare');
-            $nominee_remark = request('nominee_remark');
+        if ($request->has('nominee_id')) {
+            $nominee_id = $request->input('nominee_id');
+            $nominee_type = $request->input('nominee_type');
+            $nominee_share = $request->input('nominee_share');
+            $nominee_totalshare = $request->input('nominee_totalshare');
+            $nominee_remark = $request->input('nominee_remark');
 
             for($i = 0; $i < count($nominee_id); $i++) {
-                $nominee = new Nominee;
-
-                $nominee->land_id = $id;
-                $nominee->type = $nominee_type[$i];
-                $nominee->item_id = $nominee_id[$i];
-                $nominee->share = $nominee_share[$i];
-                $nominee->total_share = $nominee_totalshare[$i];
-                $nominee->remarks = $nominee_remark[$i];
-
-                $nominee->save();
+                Nominee::create([
+                    'land_id' => $land->id,
+                    'type' => $nominee_type[$i],
+                    'item_id' => $nominee_id[$i],
+                    'share' => $nominee_share[$i],
+                    'total_share' => $nominee_totalshare[$i],
+                    'remarks' => $nominee_remark[$i],
+                ]);
             }
         }
 
-        if (request('consent_id') != NULL) {
-            $consent_id = request('consent_id');
-            $signing_date_consent = request('signing_date_consent');
-            $stamping_date_consent = request('stamping_date_consent');
-            $instrument_no = request('instrument_no');
-            $instrument_registered_date = request('instrument_registered_date');
+        if ($request->has('consent_id')) {
+            $consent_id = $request->input('consent_id');
+            $signing_date_consent = $request->input('signing_date_consent');
+            $stamping_date_consent = $request->input('stamping_date_consent');
+            $instrument_no = $request->input('instrument_no');
+            $instrument_registered_date = $request->input('instrument_registered_date');
 
             for($i = 0; $i < count($consent_id); $i++) {
                 $land->consent()->attach($consent_id[$i], [
@@ -553,67 +471,62 @@ class LandController extends Controller
             }
         }
 
-        if (request('trustee_id') != NULL) {
-            $trustee_id = request('trustee_id');
-            $trustee_type = request('trustee_type');
-            $trustee_share = request('trustee_share');
-            $trustee_totalshare = request('trustee_totalshare');
-            $trustee_remark = request('trustee_remark');
+        if ($request->has('trustee_id')) {
+            $trustee_id = $request->input('trustee_id');
+            $trustee_type = $request->input('trustee_type');
+            $trustee_share = $request->input('trustee_share');
+            $trustee_totalshare = $request->input('trustee_totalshare');
+            $trustee_remark = $request->input('trustee_remark');
 
             for($i = 0; $i < count($trustee_id); $i++) {
-                $trustee = new Trustee;
-
-                $trustee->land_id = $id;
-                $trustee->type = $trustee_type[$i];
-                $trustee->item_id = $trustee_id[$i];
-                $trustee->share = $trustee_share[$i];
-                $trustee->total_share = $trustee_totalshare[$i];
-                $trustee->remarks = $trustee_remark[$i];
-
-                $trustee->save();
+                Trustee::create([
+                    'land_id' => $land->id,
+                    'type' => $trustee_type[$i],
+                    'item_id' => $trustee_id[$i],
+                    'share' => $trustee_share[$i],
+                    'total_share' => $trustee_totalshare[$i],
+                    'remarks' => $trustee_remark[$i],
+                ]);
             }
         }
 
-        if (request('beneficiary_id') != NULL) {
-            $beneficiary_id = request('beneficiary_id');
-            $beneficiary_type = request('beneficiary_type');
-            $beneficiary_share = request('beneficiary_share');
-            $beneficiary_totalshare = request('beneficiary_totalshare');
-            $beneficiary_remark = request('beneficiary_remark');
+        if ($request->has('beneficiary_id')) {
+            $beneficiary_id = $request->input('beneficiary_id');
+            $beneficiary_type = $request->input('beneficiary_type');
+            $beneficiary_share = $request->input('beneficiary_share');
+            $beneficiary_totalshare = $request->input('beneficiary_totalshare');
+            $beneficiary_remark = $request->input('beneficiary_remark');
 
             for($i = 0; $i < count($beneficiary_id); $i++) {
-                $beneficiary = new Beneficiary;
-
-                $beneficiary->land_id = $id;
-                $beneficiary->type = $beneficiary_type[$i];
-                $beneficiary->item_id = $beneficiary_id[$i];
-                $beneficiary->share = $beneficiary_share[$i];
-                $beneficiary->total_share = $beneficiary_totalshare[$i];
-                $beneficiary->remarks = $beneficiary_remark[$i];
-
-                $beneficiary->save();
+                Beneficiary::create([
+                    'land_id' => $land->id,
+                    'type' => $beneficiary_type[$i],
+                    'item_id' => $beneficiary_id[$i],
+                    'share' => $beneficiary_share[$i],
+                    'total_share' => $beneficiary_totalshare[$i],
+                    'remarks' => $beneficiary_remark[$i],
+                ]);
             }
         }
         
-        return redirect('/lands');
+        return redirect('/lands')->with('success','Edited Successfully!');
     }
     
     public function destroy($id){
 
         $land = Land::findOrFail($id);
         if ($land->delete()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = $land->land_description;
-            $log->class = "Land";
-            $log->action = "Delete";
-
-            $log->save();
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $land->land_description,
+                'class' => 'Land',
+                'action' => 'Delete',
+            ]);
+        } else {
+            return back()->withErrors('Deletion Failed!');
         }
-
         
-        return redirect('/lands');
+        return redirect('/lands')->with('success','Deleted!');
     }
 
     public function download($id) {

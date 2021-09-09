@@ -11,6 +11,16 @@ class Beneficiary extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'land_id',
+        'type',
+        'item_id',
+        'share',
+        'total_share',
+        'remarks'
+    ];
+
+
     protected $table = 'beneficiaries';
 
     public function contact()

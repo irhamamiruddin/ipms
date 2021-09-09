@@ -20,14 +20,9 @@
 <div class="row">
     <div class="col-6 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 <span>Officers In Charge</span>
-                <table id="oic-table" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <td>Officer</td>
-                        </tr>
-                    </thead>
+                <table id="oic-table" class="table table-primary table-bordered border-primary">
                     <tbody>
                         @forelse($land->officer_in_charge as $oic)
                         <tr>
@@ -46,14 +41,9 @@
 
     <div class="col-6 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 <span>Relief Officers In Charge</span>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <td>Officer</td>
-                        </tr>
-                    </thead>
+                <table class="table table-primary table-bordered border-primary">
                     <tbody>
                         @forelse($land->relief_officer_in_charge as $roic)
                         <tr>
@@ -74,7 +64,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 <span>Ketua Kampung</span>
                 <table id="kk-table" class="table table-striped">
                     <thead>
@@ -106,7 +96,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             <span>Registered Proprietors</span>
                 <table id="rp-table" class="table table-striped">
                     <thead>
@@ -142,7 +132,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             <span>Agreements</span>
                 <table id="agreement-table" class="table table-striped">
                     <thead>
@@ -184,7 +174,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             <span>Nominees</span>
                 <table id="nominee-table" class="table table-striped">
                     <thead>
@@ -220,7 +210,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             <span>Consents</span>
                 <table id="consent-table" class="table table-striped">
                     <thead>
@@ -256,7 +246,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             <span>Trustees</span>
                 <table class="table table-striped">
                     <thead>
@@ -292,7 +282,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             <span>Beneficiaries</span>
                 <table class="table table-striped">
                     <thead>

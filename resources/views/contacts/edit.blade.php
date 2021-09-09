@@ -12,6 +12,16 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body pb-0">
+                @if (Session::has('success'))
+                    <div class="alert alert-success"> {{Session::get('success')}} </div>
+                @endif
+                @if($errors->any())
+                    <div class="alert alert-danger"> 
+                        @foreach ($errors->all() as $message)
+                            {{$message}} <br>
+                        @endforeach
+                    </div>
+                @endif
                 @include('contacts.forms.main')
             </div>
         </div>

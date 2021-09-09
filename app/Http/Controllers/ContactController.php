@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use App\Exports\ContactFromView;
 use App\Models\Contact;
 use App\Models\Company;
@@ -46,56 +45,44 @@ class ContactController extends Controller
         return view('contacts.create',$data);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $contacts = New Contact();
-        $string = Str::random(16);
+        $request->validate([
+            'email' => ['email', 'max:255', 'unique:users', 'unique:contacts', 'unique:companies']
+        ]);
 
-        $contacts->name = request('name');
-        $contacts->nric = request('nric');
-        $contacts->race = request('race');
-        $contacts->address = request('address');
-        $contacts->contact_no = request('contact_no');
-        $contacts->home_phone = request('home_phone');
-        $contacts->office_phone = request('office_phone');
-        $contacts->fax_phone = request('fax_phone');
-        $contacts->email = request('email');
-        $contacts->image = request('image')->storeAs('image',$string.'.jpg');
-        $contacts->remark = request('remark');
-
-        if ($contacts->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "Contact";
-            $log->action = "Add";
-
-            $log->save();
+        $contact = Contact::create($request->all());
+        if ($request->has('image')) {
+            $contact->image = $request->image->store('images');
+            $contact->save();
         }
         
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('name'),
+            'class' => 'Contact',
+            'action' => 'Add',
+        ]);
 
-        $contact = Contact::find($contacts->id);
-
-        if (request('company_id') != NULL) {
-            $company_id = request('company_id');
-            $submitted_c_role = request('submitted_c_role');
+        if ($request->has('company_id')) {
+            $company_id = $request->input('company_id');
+            $submitted_c_role = $request->input('submitted_c_role');
 
             for($i = 0; $i < count($company_id); $i++) {
                 $contact->companies()->attach($company_id[$i], ['role' => $submitted_c_role[$i]]);
             }
         }
 
-        if (request('user_id') != NULL) {
-            $user_id = request('user_id');
-            $submitted_u_role = request('submitted_u_role');
-            
+        if ($request->has('user_id')) {
+            $user_id = $request->input('user_id');
+            $submitted_u_role = $request->input('submitted_u_role');
+
             for($j = 0; $j < count($user_id); $j++) {
                 $contact->users()->attach($user_id[$j], ['role' => $submitted_u_role[$j]]);
             }
         }
 
-        return redirect('/contacts');
+        return redirect('/contacts')->with('success','Created Successfully!');
     }
 
     public function show($id)
@@ -121,74 +108,62 @@ class ContactController extends Controller
         return view('contacts.edit',$data);
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'email' => ['email', 'max:255', 'unique:users', 'unique:contacts,email,'.$id, 'unique:companies']
+        ]);
+        
         $contact = Contact::findOrFail($id);
-        $string = Str::random(16);
-
-        $contact->name = request('name');
-        $contact->nric = request('nric');
-        $contact->race = request('race');
-        $contact->address = request('address');
-        $contact->contact_no = request('contact_no');
-        $contact->home_phone = request('home_phone');
-        $contact->office_phone = request('office_phone');
-        $contact->fax_phone = request('fax_phone');
-        $contact->email = request('email');
-        if (!is_null(request('image'))) {
-            Storage::delete($contact->image);
-            $contact->image = request('image')->storeAs('image',$string.'.jpg');
+        $contact->fill($request->all());
+        if ($request->has('image')) {
+            $contact->image = $request->image->store('images');
         }
-        $contact->remark = request('remark');
+        $contact->save();
 
-        if ($contact->save()) {
-            $log = New ActivityLog();
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('name'),
+            'class' => 'Contact',
+            'action' => 'Edit',
+        ]);
 
-            $log->user_id = Auth::id();
-            $log->name = request('name');
-            $log->class = "Contact";
-            $log->action = "Update";
-
-            $log->save();
-        }
-
-        if (request('company_id') != NULL) {
-            $company_id = request('company_id');
-            $submitted_c_role = request('submitted_c_role');
+        if ($request->has('company_id')) {
+            $company_id = $request->input('company_id');
+            $submitted_c_role = $request->input('submitted_c_role');
 
             for($i = 0; $i < count($company_id); $i++) {
                 $contact->companies()->attach($company_id[$i], ['role' => $submitted_c_role[$i]]);
             }
         }
 
-        if (request('user_id') != NULL) {
-            $user_id = request('user_id');
-            $submitted_u_role = request('submitted_u_role');
-            
+        if ($request->has('user_id')) {
+            $user_id = $request->input('user_id');
+            $submitted_u_role = $request->input('submitted_u_role');
+
             for($j = 0; $j < count($user_id); $j++) {
                 $contact->users()->attach($user_id[$j], ['role' => $submitted_u_role[$j]]);
             }
         }
 
-        return redirect('/contacts');
+        return redirect('/contacts')->with('success','Edited Successfully!');
     }
     
     public function destroy($id){
 
         $contact = Contact::findOrFail($id);
         if ($contact->delete()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = $contact->name;
-            $log->class = "Contact";
-            $log->action = "Delete";
-
-            $log->save();
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $contact->name,
+                'class' => 'Contact',
+                'action' => 'Delete',
+            ]);
+        } else {
+            return back()->withErrors('Deletion Failed!');
         }
 
-        
-        return redirect('/contacts');
+        return redirect('/contacts')->with('success','Deleted!');
     }
 
     public function export() {

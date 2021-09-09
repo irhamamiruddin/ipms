@@ -11,6 +11,32 @@ class Land extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'land_description',
+        'field_lot',
+        'lot',
+        'block',
+        'district',
+        'locality',
+        'gps_land_size',
+        'gps_land_size_unit',
+        'size',
+        'size_unit',
+        'classification',
+        'term',
+        'commencement_date',
+        'expiry_date',
+        'date_of_registration',
+        'annual_rent',
+        'land_acquisition_status_id',
+        'division',
+        'categories_of_land_id',
+        'special_condition',
+        'annual_rent_last_paid_date',
+        'annual_rent_next_paid_date',
+        'remark'
+    ];
+
     public function registered_proprietors()
     {
         return $this->hasMany('App\Models\RegisteredProprietor', 'land_id');

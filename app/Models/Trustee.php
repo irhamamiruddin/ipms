@@ -11,6 +11,15 @@ class Trustee extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'land_id',
+        'type',
+        'item_id',
+        'share',
+        'total_share',
+        'remarks'
+    ];
+
     public function contact()
     {
         return $this->belongsTo('App\Models\Contact', 'item_id');

@@ -11,6 +11,20 @@ class Contact extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'nric',
+        'race',
+        'address',
+        'contact_no',
+        'home_phone',
+        'office_phone',
+        'fax_phone',
+        'email',
+        'remark'
+    ];
+
+
     public function companies()
     {
         return $this->belongsToMany('App\Models\Company')

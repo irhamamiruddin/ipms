@@ -20,13 +20,7 @@
 
 <div class="row pt-3">
     <div class="col-lg-12 table-responsive">
-        <table id="oic-table" class="table table-striped" hidden>
-            <thead>
-                <tr>
-                    <td>Officer In Charge</td>
-                    <td></td>
-                </tr>
-            </thead>
+        <table id="oic-table" class="table table-success table-bordered border-primary" hidden>
             <tbody id="oic">
                 
             </tbody>
@@ -55,7 +49,7 @@
             i++;
             var addrow= "<tr id='oic_row"+i+"'>"
             addrow+="<td><input type='hidden' id='id"+i+"' name='oic_id[]' value='"+selectedId+"'>"+selectedname+"</td>"
-            addrow+="<td><a id="+i+" class='oic_remove'><i class='icon-directions p-1'></i></a></td>"
+            addrow+="<td class='text-center'><a id="+i+" class='oic_remove'><i class='icon-directions p-1'></i></a></td>"
             addrow+="</tr>";
             $("#oic").append(addrow); 
         });

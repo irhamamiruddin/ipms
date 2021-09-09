@@ -1,7 +1,7 @@
 <div class="form-row">
     <div class="form-group col-md-4">
         {{ Form::label('business_nature', 'Business Nature') }}
-        <select name="business_nature" class="form-control">
+        <select name="business_nature_id" class="form-control">
         @foreach ($business_natures as $key => $value)
             <option value="{{ $key }}" 
             @php

@@ -11,6 +11,15 @@ class RegisteredProprietor extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'land_id',
+        'type',
+        'item_id',
+        'share',
+        'total_share',
+        'remarks'
+    ];
+
     protected $table = 'registered_proprietors';
 
     public function contact()
