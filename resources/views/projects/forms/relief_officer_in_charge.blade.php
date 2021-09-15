@@ -20,13 +20,7 @@
 
 <div class="row pt-3">
     <div class="col-lg-12 table-responsive">
-        <table id="roic-table" class="table table-striped" hidden>
-            <thead>
-                <tr>
-                    <td>Relief Officer In Charge</td>
-                    <td></td>
-                </tr>
-            </thead>
+        <table id="roic-table" class="table table-success table-bordered border-primary" hidden>
             <tbody id="roic">
                 
             </tbody>
@@ -55,7 +49,7 @@
             i++;
             var addrow= "<tr id='roic_row"+i+"'>"
             addrow+="<td><input type='hidden' id='id"+i+"' name='roic_id[]' value='"+selectedId+"'>"+selectedname+"</td>"
-            addrow+="<td><a id="+i+" class='roic_remove'><i class='icon-directions p-1'></i></a></td>"
+            addrow+="<td class='text-center'><a id="+i+" class='roic_remove'><i class='icon-directions p-1'></i></a></td>"
             addrow+="</tr>";
             $("#roic").append(addrow); 
         });

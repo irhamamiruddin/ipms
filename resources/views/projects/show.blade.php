@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     {{ Form::label('title', 'Title') }}
@@ -43,13 +43,9 @@
 <div class="row">
     <div class="col-6 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
-                <table id="oic-table" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <td>Officer In Charge</td>
-                        </tr>
-                    </thead>
+            <div class="card-body pb-4">
+                Officer In Charge
+                <table id="oic-table" class="table table-primary table-bordered border-primary">
                     <tbody>
                         @forelse($project->officer_in_charge as $oic)
                         <tr>
@@ -68,13 +64,9 @@
 
     <div class="col-6 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
-                <table id="oic-table" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <td>Relief Officer In Charge</td>
-                        </tr>
-                    </thead>
+            <div class="card-body pb-4">
+                Relief Officer In Charge
+                <table id="oic-table" class="table table-primary table-bordered border-primary">
                     <tbody>
                         @forelse($project->relief_officer_in_charge as $roic)
                         <tr>
@@ -95,7 +87,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             Land
                 <table id="land-table" class="table table-striped">
                     <thead>
@@ -133,7 +125,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             Companies
                 <table id="company-table" class="table table-striped">
                     <thead>
@@ -169,7 +161,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
             Development Components
                 <table id="component-table" class="table table-striped">
                     <thead>

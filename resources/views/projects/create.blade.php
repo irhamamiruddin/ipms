@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 @include('projects.forms.main')
             </div>
         </div>
@@ -21,7 +21,7 @@
 <div class="row">
     <div class="col-6 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 @include('projects.forms.officer_in_charge')
             </div>
         </div>
@@ -29,7 +29,7 @@
 
     <div class="col-6 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 @include('projects.forms.relief_officer_in_charge')
             </div>
         </div>
@@ -40,7 +40,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 @include('projects.forms.land')
             </div>
         </div>
@@ -50,7 +50,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 @include('projects.forms.company')
             </div>
         </div>
@@ -60,7 +60,7 @@
 <div class="row">
     <div class="col-12 grid-margin">
         <div class="card">
-            <div class="card-body pb-0">
+            <div class="card-body pb-4">
                 @include('projects.forms.development_component')
             </div>
         </div>

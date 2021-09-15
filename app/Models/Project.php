@@ -11,6 +11,11 @@ class Project extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'title',
+        'address'
+    ];
+
     public function dev_components()
     {
         return $this->hasMany('App\Models\ProjectDevelopmentComponent', 'project_id');

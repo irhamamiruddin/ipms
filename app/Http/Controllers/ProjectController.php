@@ -49,10 +49,7 @@ class ProjectController extends Controller
         $companies = Company::all();
         $lands = Land::all();
         $project_status = ProjectStatus::pluck('project_status','id');
-        $officers = User::where('role', 'land_staff')
-                        ->orWhere('role', 'project_staff')
-                        ->orWhere('role', 'manager')
-                        ->get();
+        $officers = User::whereIs('manager', 'land_officer', 'project_officer')->get();
         $amenityTypeA1 = AmenityTypeA1::all();
         $commercialTypeC1 = CommercialTypeC1::all();
         $otherTypeO1 = OtherTypeO1::all();
@@ -76,89 +73,76 @@ class ProjectController extends Controller
         return view('projects.create',$data);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $projects = New Project();
+        $project = new Project($request->all());
+        $project->company()->associate($request->input('company'));
+        $project->project_status()->associate($request->input('project_status'));
+        $project->save();
 
-        $projects->title = request('title');
-        $projects->address = request('address');
-        $projects->company_id = request('company');
-        $projects->project_status_id = request('project_status');
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('title'),
+            'class' => 'Project',
+            'action' => 'Add',
+        ]);
 
-        if ($projects->save()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = request('title');
-            $log->class = "Project";
-            $log->action = "Add";
-
-            $log->save();
-        }
-        
-
-        $project = Project::find($projects->id);
-
-        if (request('oic_id') != NULL) {
-            $oic_id = request('oic_id');
+        if ($request->has('oic_id')) {
+            $oic_id = $request->input('oic_id');
 
             for($i = 0; $i < count($oic_id); $i++) {
                 $project->officer_in_charge()->attach($oic_id[$i]);
             }
         }
         
-        if (request('roic_id') != NULL) {
-            $roic_id = request('roic_id');
+        if ($request->has('roic_id')) {
+            $roic_id = $request->input('roic_id');
 
             for($i = 0; $i < count($roic_id); $i++) {
                 $project->relief_officer_in_charge()->attach($roic_id[$i]);
             }
         }
 
-        if (request('land_id') != NULL) {
-            $land_id = request('land_id');
+        if ($request->has('land_id')) {
+            $land_id = $request->input('land_id');
 
             for($i = 0; $i < count($land_id); $i++) {
                 $land = Land::findOrFail($land_id[$i]);
 
-                $land->project_id = $projects->id;
-
+                $land->project()->associate($project->id);
                 $land->save();
             }
         }
         
-        if (request('company_id') != NULL) {
-            $company_id = request('company_id');
+        if ($request->has('company_id')) {
+            $company_id = $request->input('company_id');
 
             for($i = 0; $i < count($company_id); $i++) {
                 $project->companies()->attach($company_id[$i]);
             }
         }
 
-        if (request('comtype') != NULL) {
-            $comtype = request('comtype');
-            $type1 = request('type1');
-            $type2 = request('type2');
-            $type3 = request('type3');
-            $units = request('units');
-            $storey = request('storey');
+        if ($request->has('comtype')) {
+            $comtype = $request->input('comtype');
+            $type1 = $request->input('type1');
+            $type2 = $request->input('type2');
+            $type3 = $request->input('type3');
+            $units = $request->input('units');
+            $storey = $request->input('storey');
 
             for($i = 0; $i < count($comtype); $i++) {
-                $dev_comp = new ProjectDevelopmentComponent;
-
-                $dev_comp->component_type = $comtype[$i];
-                $dev_comp->project_id = $projects->id;
-                $dev_comp->type1 = $type1[$i];
-                $dev_comp->type2 = $type2[$i];
-                $dev_comp->type3 = $type3[$i];
-                $dev_comp->units = $units[$i];
-                $dev_comp->storeys = $storey[$i];
-
-                $dev_comp->save();
+                $project->dev_components()->create([
+                    'component_type' => $comtype[$i],
+                    'type1' => $type1[$i],
+                    'type2' => $type2[$i],
+                    'type3' => $type3[$i],
+                    'units' => $units[$i],
+                    'storeys' => $storey[$i],
+                ]);
             }
         }
 
-        return redirect('/projects');
+        return redirect('/projects')->with('success','Created Successfully!');
     }
 
     public function show($id)
@@ -175,10 +159,7 @@ class ProjectController extends Controller
         $companies = Company::all();
         $lands = Land::all();
         $project_status = ProjectStatus::pluck('project_status','id');
-        $officers = User::where('role', 'land_staff')
-                        ->orWhere('role', 'project_staff')
-                        ->orWhere('role', 'manager')
-                        ->get();
+        $officers = User::whereIs('manager', 'land_officer', 'project_officer')->get();
         $amenityTypeA1 = AmenityTypeA1::all();
         $commercialTypeC1 = CommercialTypeC1::all();
         $otherTypeO1 = OtherTypeO1::all();
@@ -203,86 +184,78 @@ class ProjectController extends Controller
         return view('projects.edit',$data);
     }
 
-    public function update($id)
+    public function update(Request $request,$id)
     {
         $project = Project::findOrFail($id);
 
-        $project->title = request('title');
-        $project->address = request('address');
-        $project->company_id = request('company');
-        $project->project_status_id = request('project_status');
+        $project->fill($request->all());
+        $project->company()->associate($request->input('company'));
+        $project->project_status()->associate($request->input('project_status'));
+        $project->save();
 
-        if ($project->save()) {
-            $log = New ActivityLog();
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('title'),
+            'class' => 'Project',
+            'action' => 'Update',
+        ]);
 
-            $log->user_id = Auth::id();
-            $log->name = request('title');
-            $log->class = "Project";
-            $log->action = "Update";
-
-            $log->save();
-        }
-
-        if (request('oic_id') != NULL) {
-            $oic_id = request('oic_id');
+        if ($request->has('oic_id')) {
+            $oic_id = $request->input('oic_id');
 
             for($i = 0; $i < count($oic_id); $i++) {
                 $project->officer_in_charge()->attach($oic_id[$i]);
             }
         }
         
-        if (request('roic_id') != NULL) {
-            $roic_id = request('roic_id');
+        if ($request->has('roic_id')) {
+            $roic_id = $request->input('roic_id');
 
             for($i = 0; $i < count($roic_id); $i++) {
                 $project->relief_officer_in_charge()->attach($roic_id[$i]);
             }
         }
 
-        if (request('land_id') != NULL) {
-            $land_id = request('land_id');
+        if ($request->has('land_id')) {
+            $land_id = $request->input('land_id');
 
             for($i = 0; $i < count($land_id); $i++) {
                 $land = Land::findOrFail($land_id[$i]);
 
-                $land->project_id = $id;
-
+                $land->project()->associate($project->id);
                 $land->save();
             }
         }
         
-        if (request('company_id') != NULL) {
-            $company_id = request('company_id');
+        if ($request->has('company_id')) {
+            $company_id = $request->input('company_id');
 
             for($i = 0; $i < count($company_id); $i++) {
                 $project->companies()->attach($company_id[$i]);
             }
         }
 
-        if (request('comtype') != NULL) {
-            $comtype = request('comtype');
-            $type1 = request('type1');
-            $type2 = request('type2');
-            $type3 = request('type3');
-            $units = request('units');
-            $storey = request('storey');
+        if ($request->has('comtype')) {
+            $comtype = $request->input('comtype');
+            $type1 = $request->input('type1');
+            $type2 = $request->input('type2');
+            $type3 = $request->input('type3');
+            $units = $request->input('units');
+            $storey = $request->input('storey');
 
             for($i = 0; $i < count($comtype); $i++) {
-                $dev_comp = new ProjectDevelopmentComponent;
-
-                $dev_comp->component_type = $comtype[$i];
-                $dev_comp->project_id = $id;
-                $dev_comp->type1 = $type1[$i];
-                $dev_comp->type2 = $type2[$i];
-                $dev_comp->type3 = $type3[$i];
-                $dev_comp->units = $units[$i];
-                $dev_comp->storeys = $storey[$i];
-
-                $dev_comp->save();
+                $project->dev_components()->create([
+                    'component_type' => $comtype[$i],
+                    'type1' => $type1[$i],
+                    'type2' => $type2[$i],
+                    'type3' => $type3[$i],
+                    'units' => $units[$i],
+                    'storeys' => $storey[$i],
+                ]);
             }
         }
 
-        return redirect('/projects');
+        return redirect('/projects')->with('success','Edited Successfully!');
     }
     
     public function destroy($id){
@@ -297,10 +270,11 @@ class ProjectController extends Controller
             $log->action = "Delete";
 
             $log->save();
+        } else {
+            return back()->withErrors('Deletion Failed!');
         }
-
         
-        return redirect('/projects');
+        return redirect('/projects')->with('success','Deleted!');
     }
 
     public function export() {
