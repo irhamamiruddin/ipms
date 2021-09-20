@@ -262,14 +262,12 @@ class ProjectController extends Controller
 
         $project = Project::findOrFail($id);
         if ($project->delete()) {
-            $log = New ActivityLog();
-
-            $log->user_id = Auth::id();
-            $log->name = $project->title;
-            $log->class = "Project";
-            $log->action = "Delete";
-
-            $log->save();
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $project->title,
+                'class' => 'Project',
+                'action' => 'Delete',
+            ]);
         } else {
             return back()->withErrors('Deletion Failed!');
         }

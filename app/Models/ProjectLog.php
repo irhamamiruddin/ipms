@@ -11,6 +11,18 @@ class ProjectLog extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'nature',
+        'log_date',
+        'log_desc',
+        'level_1',
+        'level_2',
+        'level_3',
+        'report',
+        'reminder_date',
+        'reminder_date_noty'
+    ];
+
     protected $table = 'project_logs';
 
     public function project()

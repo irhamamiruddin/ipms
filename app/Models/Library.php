@@ -11,6 +11,16 @@ class Library extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'type'
+    ];
+
+    public function project()
+    {
+        return $this->belongsTo('App\Models\Project', 'project_id');
+    }
+
     public function lib_type()
     {
         return $this->belongsTo('App\Models\LibraryType', 'type');

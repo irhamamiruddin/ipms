@@ -46,31 +46,20 @@ class ProjectLogController extends Controller
         return view('projects.logs.create', $data);
     }
 
-    public function store($id)
+    public function store(Request $request, $id)
     {
-        $logs = New ProjectLog();
+        $project = Project::findOrFail($id);
 
-        $logs->project_id = $id;
-        $logs->nature = request('nature');
-        $logs->log_date = request('log_date');
-        $logs->log_desc = request('log_desc');
-        $logs->level_1 = request('level_1');
-        $logs->level_2 = request('level_2');
-        $logs->level_3 = request('level_3');
-        $logs->reminder_date = request('reminder_date');
+        $project->logs()->create($request->all());
+        
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('log_desc'),
+            'class' => 'Project Log',
+            'action' => 'Add',
+        ]);
 
-        if ($logs->save()) {
-            $activitylog = New ActivityLog();
-
-            $activitylog->user_id = Auth::id();
-            $activitylog->name = request('log_desc');
-            $activitylog->class = "Project Log";
-            $activitylog->action = "Add";
-
-            $activitylog->save();
-        }
-
-        return redirect()->route('projects.logs.index', $id);
+        return redirect()->route('projects.logs.index', $id)->with('success','Created Successfully!');
     }
 
     public function show($project_id, $log_id)
@@ -115,49 +104,35 @@ class ProjectLogController extends Controller
         return view('projects.logs.edit', $data);
     }
 
-    public function update($project_id, $log_id)
+    public function update(Request $request, $project_id, $log_id)
     {
         $log = ProjectLog::findOrFail($log_id);
 
-        $log->project_id = $project_id;
-        $log->nature = request('nature');
-        $log->log_date = request('log_date');
-        $log->log_desc = request('log_desc');
-        $log->level_1 = request('level_1');
-        $log->level_2 = request('level_2');
-        $log->level_3 = request('level_3');
-        $log->reminder_date = request('reminder_date');
+        $log->update($request->all());
 
-        if ($log->save()) {
-            $activitylog = New ActivityLog();
-
-            $activitylog->user_id = Auth::id();
-            $activitylog->name = request('log_desc');
-            $activitylog->class = "Project Log";
-            $activitylog->action = "Update";
-
-            $activitylog->save();
-        }
-
-        return redirect()->route('projects.logs.index', $project_id);
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('log_desc'),
+            'class' => 'Project Log',
+            'action' => 'Update',
+        ]);
+        
+        return redirect()->route('projects.logs.index', $project_id)->with('success','Edited Successfully!');
     }
 
     public function destroy($project_id, $log_id)
     {
         $log = ProjectLog::findOrFail($log_id);
         if ($log->delete()) {
-            $activitylog = New ActivityLog();
-
-            $activitylog->user_id = Auth::id();
-            $activitylog->name = $log->log_desc;
-            $activitylog->class = "Project Log";
-            $activitylog->action = "Delete";
-
-            $activitylog->save();
+            ActivityLog::create([
+                'user_id' => Auth::id(),
+                'name' => $log->log_desc,
+                'class' => 'Project Log',
+                'action' => 'Delete',
+            ]);
         }
-
         
-        return redirect()->route('projects.logs.index', $project_id);
+        return redirect()->route('projects.logs.index', $project_id)->with('success','Deleted!');
     }
 
     public function update_report($project_id, $log_id){

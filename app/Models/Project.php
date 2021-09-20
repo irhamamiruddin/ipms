@@ -31,6 +31,16 @@ class Project extends Model
         return $this->hasMany('App\Models\Land', 'project_id');
     }
 
+    public function libraries()
+    {
+        return $this->hasMany('App\Models\Library', 'project_id');
+    }
+
+    public function consultants()
+    {
+        return $this->hasMany('App\Models\Consultant', 'project_id');
+    }
+
     public function project_status()
     {
         return $this->belongsTo('App\Models\ProjectStatus', 'project_status_id');
