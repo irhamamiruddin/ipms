@@ -9,7 +9,9 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Land Ownerships</span>
         <div class="float-right">
+            @can('report-land_ownerships_export')
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('reports.land_ownerships.export') }}">Export</a>
+            @endcan
         </div>
     </div>
 </div>

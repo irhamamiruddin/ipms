@@ -9,7 +9,9 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Lands</span>
         <div class="float-right">
+            @can('land-export')
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.export') }}">Export</a>
+            @endcan
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('lands.create') }}">Add Land</a>
         </div>
     </div>

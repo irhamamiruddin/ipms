@@ -21,6 +21,7 @@ class CompanyController extends Controller
         $this->middleware('can:company-create', ['only' => ['create']]);
         $this->middleware('can:company-edit', ['only' => ['edit']]);
         $this->middleware('can:company-destroy', ['only' => ['destroy']]);
+        $this->middleware('can:company-export', ['only' => ['export']]);
     }
 
     public function index()

@@ -25,6 +25,13 @@ class RoleSeeder extends Seeder
         // Bouncer::allow('superadmin')->to('setting-user');
         Bouncer::allow('superadmin')->everything();
 
+        Bouncer::allow('manager')->to('company-export');
+        Bouncer::allow('manager')->to('contact-export');
+        Bouncer::allow('manager')->to('land-export');
+        Bouncer::allow('manager')->to('project-export');
+        Bouncer::allow('manager')->to('report-land_log_export');
+        Bouncer::allow('manager')->to('report-project_log_export');
+        Bouncer::allow('manager')->to('report-land_ownerships_export');
         Bouncer::allow('manager')->to('user-update');
         Bouncer::allow('manager')->to('contact-index');
         Bouncer::allow('manager')->to('contact-create');

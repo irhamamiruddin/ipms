@@ -22,6 +22,9 @@ class ReportController extends Controller
         $this->middleware('can:report-project_log', ['only' => ['project_log']]);
         $this->middleware('can:report-land_ownerships', ['only' => ['land_ownerships']]);
         $this->middleware('can:report-system_log', ['only' => ['system_log']]);
+        $this->middleware('can:report-land_log_export', ['only' => ['land_log_export']]);
+        $this->middleware('can:report-project_log_export', ['only' => ['project_log_export']]);
+        $this->middleware('can:report-land_ownerships_export', ['only' => ['land_ownerships_export']]);
     }
 
     public function land_log()

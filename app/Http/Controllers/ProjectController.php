@@ -24,6 +24,7 @@ use App\Models\LogLevel3;
 use App\Models\ProjectLog;
 use App\Models\ActivityLog;
 use Auth;
+use Bouncer;
 
 class ProjectController extends Controller
 {
@@ -35,11 +36,20 @@ class ProjectController extends Controller
         $this->middleware('can:project-create', ['only' => ['create']]);
         $this->middleware('can:project-edit', ['only' => ['edit']]);
         $this->middleware('can:project-destroy', ['only' => ['destroy']]);
+        $this->middleware('can:project-export', ['only' => ['export']]);
     }
 
     public function index()
     {
-        $projects = Project::all();
+        $user = User::findOrFail(Auth::id());
+
+        if (Bouncer::is($user)->a('superadmin', 'manager')) {
+            $projects = Project::all();
+        } else {
+            $projects = $user->project_officer_in_charge()->get();
+            $projects = $projects->merge($user->project_relief_officer_in_charge()->get());
+            $projects = $projects->unique()->sort();
+        }
         
         return view('projects.index',['projects'=>$projects]);
     }

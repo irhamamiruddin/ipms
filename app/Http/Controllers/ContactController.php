@@ -22,6 +22,7 @@ class ContactController extends Controller
         $this->middleware('can:contact-create', ['only' => ['create']]);
         $this->middleware('can:contact-edit', ['only' => ['edit']]);
         $this->middleware('can:contact-destroy', ['only' => ['destroy']]);
+        $this->middleware('can:contact-export', ['only' => ['export']]);
     }
 
     public function index()

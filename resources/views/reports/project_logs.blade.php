@@ -9,7 +9,9 @@
     <div class="col-12 grid-margin">
         <span class="card-title display-4">Project Logs</span>
         <div class="float-right">
+            @can('report-project_log_export')
             <a class="btn btn-inverse-primary btn-fw" href="{{ route('reports.project_log.export') }}">Export</a>
+            @endcan
         </div>
     </div>
 </div>

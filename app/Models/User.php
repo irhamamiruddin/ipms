@@ -48,25 +48,25 @@ class User extends Authenticatable
     public function land_officer_in_charge()
     {
         return $this->belongsToMany('App\Models\Land', 'land_officer_in_charge', 
-        'land_id', 'user_id');
+        'user_id', 'land_id');
     }
 
     public function land_relief_officer_in_charge()
     {
         return $this->belongsToMany('App\Models\Land', 'land_relief_officer_in_charge', 
-        'land_id', 'user_id');
+        'user_id', 'land_id');
     }
-
+    
     public function project_officer_in_charge()
     {
         return $this->belongsToMany('App\Models\Project', 'project_officer_in_charge', 
-        'project_id', 'user_id');
+        'user_id', 'project_id');
     }
 
     public function project_relief_officer_in_charge()
     {
         return $this->belongsToMany('App\Models\Project', 'project_relief_officer_in_charge', 
-        'project_id', 'user_id');
+        'user_id', 'project_id');
     }
 
     public function contacts()

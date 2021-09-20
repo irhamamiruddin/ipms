@@ -28,6 +28,7 @@ use App\Models\ActivityLog;
 use App\Models\File;
 use App\Models\Agreement;
 use Auth;
+use Bouncer;
 
 class LandController extends Controller
 {
@@ -40,12 +41,20 @@ class LandController extends Controller
         $this->middleware('can:land-edit', ['only' => ['edit']]);
         $this->middleware('can:land-destroy', ['only' => ['destroy']]);
         $this->middleware('can:land-download', ['only' => ['download']]);
+        $this->middleware('can:land-export', ['only' => ['export']]);
     }
 
     public function index()
     {
-        $lands = Land::all();
+        $user = User::findOrFail(Auth::id());
 
+        if (Bouncer::is($user)->a('superadmin', 'manager')) {
+            $lands = Land::all();
+        } else {
+            $lands = $user->land_officer_in_charge()->get();
+            $lands = $lands->merge($user->land_relief_officer_in_charge()->get());
+            $lands = $lands->unique()->sort();
+        }
         return view('lands.index', ['lands'=>$lands]);
     }
 
